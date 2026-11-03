@@ -221,9 +221,38 @@ def test_reconcile_rejects_wrong_type():
     with pytest.raises(TypeError):
         reconcile_data({"csv": "not a dataframe"})
 
-
 def test_reconcile_clean_data_is_sorted():
     rows = list(reversed(good_rows()))
     clean = reconcile_data({"csv": make_df(rows)})["clean"]
     assert clean["country"].tolist() == ["Afghanistan", "Afghanistan", "Albania"]
     assert clean["year"].tolist() == [1952, 1957, 1952]
+
+def build_results():
+    csv_rows = good_rows() + [["Bad", "Asia", 1952, 999.0, 100, 700.0]]
+    json_rows = [["Afghanistan", "Asia", 1952, 35.0, 8425333, 779.4453]]
+    return reconcile_data({"csv": make_df(csv_rows), "json": make_df(json_rows)})
+
+
+def test_report_json_can_be_read_back(tmp_path):
+    output_path = tmp_path / "reports" / "report.json"
+    generate_validation_report(build_results(), output_path)
+    report = json.loads(output_path.read_text(encoding="utf-8"))
+    assert report["summary"]["rejected_records"] == 1
+    assert len(report["rejected_records"]) == 1
+    assert len(report["conflicting_records"]) == 2
+
+
+def test_report_text_contains_key_sections(tmp_path):
+    output_path = tmp_path / "report.txt"
+    returned = generate_validation_report(build_results(), output_path)
+    text = output_path.read_text(encoding="utf-8")
+    assert returned == str(output_path)
+    assert "VALIDATION REPORT" in text
+    assert "REJECTED RECORDS" in text
+    assert "CONFLICTING RECORDS" in text
+    assert "lifeExp: above maximum" in text
+
+
+def test_report_rejects_invalid_results(tmp_path):
+    with pytest.raises(ValueError):
+        generate_validation_report({"oops": 1}, tmp_path / "report.txt")
