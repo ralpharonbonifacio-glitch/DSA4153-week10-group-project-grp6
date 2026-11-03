@@ -136,3 +136,33 @@ def validate_data(data, rules=None):
         "reject_reasons": dict(reason_counts),
     }
     return {"valid": valid, "rejected": rejected, "summary": summary}
+
+def remove_duplicates(data):
+    """Remove exact duplicate records (all six canonical columns are equal).
+
+    The first occurrence is kept.
+
+    Returns
+    -------
+    (unique_records, removed_duplicates) - both DataFrames
+    """
+    _check_input(data)
+    is_duplicate = data.duplicated(subset=CANONICAL_COLUMNS, keep="first")
+    return data[~is_duplicate].copy(), data[is_duplicate].copy()
+
+
+def detect_conflicts(data):
+    """Find (country, year) keys that appear with different values.
+
+    Exact duplicates are not conflicts, so they are ignored here.
+
+    Returns
+    -------
+    DataFrame with every record that belongs to a conflicting key, sorted by
+    country and year. Empty DataFrame (same columns) if there are no conflicts.
+    """
+    _check_input(data)
+    unique_records = data.drop_duplicates(subset=CANONICAL_COLUMNS, keep="first")
+    in_conflict = unique_records.duplicated(subset=KEY_COLUMNS, keep=False)
+    conflicts = unique_records[in_conflict]
+    return conflicts.sort_values(KEY_COLUMNS, kind="stable").copy()
