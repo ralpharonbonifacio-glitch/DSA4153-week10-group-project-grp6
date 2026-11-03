@@ -165,3 +165,22 @@ def index_by_loop(matrix, baseline_column):
             result[i][j] = matrix[i][j] / baseline * 100
 
     return result
+
+def generate_country_summary(data):
+    """
+    Generates summary statistics grouped by country.
+
+    Returns:
+        DataFrame: Average life expectancy, population,
+        and GDP per capita for each country.
+    """
+
+    country_summary = data.groupby(
+        ["country", "continent"]
+    ).agg({
+        "lifeExp": "mean",
+        "pop": "mean",
+        "gdpPercap": "mean"
+    })
+
+    return country_summary.reset_index()

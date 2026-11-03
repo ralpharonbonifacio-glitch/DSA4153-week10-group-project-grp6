@@ -11,7 +11,8 @@ from src.analysis import (
     region_population_numpy,
     build_population_matrix,
     index_by_broadcast,
-    index_by_loop
+    index_by_loop,
+    generate_country_summary
 )
 
 from src.analysis_exports import export_analysis_results
@@ -143,3 +144,16 @@ def test_index_by_loop():
         result,
         [[100, 200, 300], [100, 200, 300]]
     )
+
+def test_generate_country_summary():
+    data = create_sample_data()
+
+    result = generate_country_summary(data)
+
+    philippines = result[result["country"] == "Philippines"]
+
+    assert len(philippines) == 1
+    assert philippines.iloc[0]["continent"] == "Asia"
+    assert philippines.iloc[0]["lifeExp"] == 71.0
+    assert philippines.iloc[0]["pop"] == 85500000
+    assert philippines.iloc[0]["gdpPercap"] == 2250.0
