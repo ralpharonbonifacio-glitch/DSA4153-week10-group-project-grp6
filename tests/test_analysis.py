@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 
 from src.analysis import (
@@ -6,7 +7,11 @@ from src.analysis import (
     analyze_population,
     analyze_gdp,
     generate_continent_summary,
-    analyze_yearly_trends
+    analyze_yearly_trends,
+    region_population_numpy,
+    build_population_matrix,
+    index_by_broadcast,
+    index_by_loop
 )
 
 from src.analysis_exports import export_analysis_results
@@ -87,3 +92,54 @@ def test_export_analysis_results(tmp_path):
 
     assert result is True
     assert len(exported_data) == 4
+
+def test_region_population_numpy():
+    data = create_sample_data()
+
+    result = region_population_numpy(data, "Asia", 2007)
+
+    assert result == (2, 219000000)
+
+
+def test_build_population_matrix():
+    data = create_sample_data()
+
+    result = build_population_matrix(
+        data,
+        ["Philippines", "Japan"],
+        [2002, 2007]
+    )
+
+    assert result.shape == (2, 2)
+    assert result[0, 0] == 80000000
+    assert result[0, 1] == 91000000
+
+
+def test_index_by_broadcast():
+    matrix = np.array([
+        [100, 200, 300],
+        [200, 400, 600]
+    ])
+
+    result, baseline_shape, result_shape = index_by_broadcast(matrix, 0)
+
+    assert baseline_shape == (2, 1)
+    assert result_shape == (2, 3)
+    np.testing.assert_array_equal(
+        result,
+        [[100, 200, 300], [100, 200, 300]]
+    )
+
+
+def test_index_by_loop():
+    matrix = np.array([
+        [100, 200, 300],
+        [200, 400, 600]
+    ])
+
+    result = index_by_loop(matrix, 0)
+
+    np.testing.assert_array_equal(
+        result,
+        [[100, 200, 300], [100, 200, 300]]
+    )

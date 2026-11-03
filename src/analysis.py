@@ -96,3 +96,72 @@ def analyze_yearly_trends(data):
     })
 
     return yearly_trends.reset_index()
+
+def region_population_numpy(data, region, year):
+    """
+    Calculates the number of countries and total population
+    in a selected continent and year using NumPy.
+    """
+
+    continents = data["continent"].to_numpy()
+    years = data["year"].to_numpy()
+    populations = data["pop"].to_numpy()
+
+    selected = (continents == region) & (years == year)
+
+    country_count = selected.sum()
+    total_population = populations[selected].sum()
+
+    return int(country_count), int(total_population)
+
+
+def build_population_matrix(data, countries, years):
+    """
+    Builds a population matrix where rows represent countries
+    and columns represent years.
+    """
+
+    matrix = np.zeros((len(countries), len(years)), dtype=np.int64)
+
+    country_names = data["country"].to_numpy()
+    observation_years = data["year"].to_numpy()
+    populations = data["pop"].to_numpy()
+
+    for i, country in enumerate(countries):
+        for j, year in enumerate(years):
+
+            selected = (country_names == country) & (observation_years == year)
+
+            if selected.sum() != 1:
+                raise ValueError("Expected exactly one record per country and year.")
+
+            matrix[i, j] = populations[selected].sum()
+
+    return matrix
+
+
+def index_by_broadcast(matrix, baseline_column):
+    """
+    Calculates population indexes using NumPy broadcasting.
+    """
+
+    baseline = matrix[:, [baseline_column]]
+    index = matrix / baseline * 100
+
+    return index, baseline.shape, index.shape
+
+
+def index_by_loop(matrix, baseline_column):
+    """
+    Calculates population indexes using nested loops.
+    """
+
+    result = np.zeros(matrix.shape, dtype=float)
+
+    for i in range(matrix.shape[0]):
+        baseline = float(matrix[i][baseline_column])
+
+        for j in range(matrix.shape[1]):
+            result[i][j] = matrix[i][j] / baseline * 100
+
+    return result
