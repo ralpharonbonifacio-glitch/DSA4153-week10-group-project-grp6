@@ -1,0 +1,14 @@
+{
+    "input_directory": "data",
+    "output_directory": "output",
+    "primary_key": [
+        "country",
+        "year"
+    ],
+    "supported_formats": [
+        "csv",
+        "xlsx",
+        "json",
+        "parquet"
+    ]
+}
