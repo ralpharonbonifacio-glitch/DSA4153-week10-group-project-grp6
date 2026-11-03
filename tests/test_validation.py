@@ -184,3 +184,46 @@ def test_detect_conflicts_none():
     conflicts = detect_conflicts(make_df(good_rows()))
     assert conflicts.empty
     assert list(conflicts.columns) == CANONICAL_COLUMNS
+
+def test_reconcile_same_data_from_two_formats():
+    result = reconcile_data({"csv": make_df(good_rows()), "json": make_df(good_rows())})
+    assert len(result["clean"]) == 3
+    assert result["summary"]["duplicate_records_removed"] == 3
+    assert result["summary"]["conflicting_keys"] == 0
+    assert list(result["clean"].columns) == CANONICAL_COLUMNS
+
+
+def test_reconcile_quarantines_conflicts_and_rejects_invalid():
+    csv_rows = good_rows() + [["Bad", "Asia", 1952, 999.0, 100, 700.0]]
+    json_rows = [["Afghanistan", "Asia", 1952, 35.0, 8425333, 779.4453]]
+    result = reconcile_data({"csv": make_df(csv_rows), "json": make_df(json_rows)})
+
+    assert len(result["rejected"]) == 1
+    assert result["rejected"]["source"].iloc[0] == "csv"
+    assert result["summary"]["conflicting_keys"] == 1
+    assert set(result["conflicts"]["source"]) == {"csv", "json"}
+    assert len(result["clean"]) == 2
+    assert not ((result["clean"]["country"] == "Afghanistan") & (result["clean"]["year"] == 1952)).any()
+
+
+def test_reconcile_accepts_list_of_dataframes():
+    result = reconcile_data([make_df(good_rows()), make_df(good_rows())])
+    assert result["summary"]["sources"] == ["source_1", "source_2"]
+    assert len(result["clean"]) == 3
+
+
+def test_reconcile_rejects_empty_input():
+    with pytest.raises(ValueError):
+        reconcile_data([])
+
+
+def test_reconcile_rejects_wrong_type():
+    with pytest.raises(TypeError):
+        reconcile_data({"csv": "not a dataframe"})
+
+
+def test_reconcile_clean_data_is_sorted():
+    rows = list(reversed(good_rows()))
+    clean = reconcile_data({"csv": make_df(rows)})["clean"]
+    assert clean["country"].tolist() == ["Afghanistan", "Afghanistan", "Albania"]
+    assert clean["year"].tolist() == [1952, 1957, 1952]
