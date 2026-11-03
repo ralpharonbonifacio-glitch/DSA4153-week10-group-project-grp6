@@ -100,6 +100,9 @@ def reconcile_data(dataframes, rules=None):
         "conflicting_records": int(len(conflicts)),
         "clean_records": int(len(clean)),
     }
+    output_path = Path("output/cleaned_data.csv")
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    clean.to_csv(output_path, index=False)
     return {
         "clean": clean,
         "rejected": rejected_all,
