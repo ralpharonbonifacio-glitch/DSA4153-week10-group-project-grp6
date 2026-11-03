@@ -108,3 +108,76 @@ def reconcile_data(dataframes, rules=None):
         "conflicts": conflicts.reset_index(drop=True),
         "summary": summary,
     }
+
+def _table_to_text(df):
+    if df is None or len(df) == 0:
+        return "  (none)\n"
+    text = df.head(REPORT_SAMPLE_ROWS).to_string(index=False)
+    text = "\n".join("  " + line for line in text.splitlines())
+    if len(df) > REPORT_SAMPLE_ROWS:
+        text += f"\n  ... and {len(df) - REPORT_SAMPLE_ROWS} more"
+    return text + "\n"
+
+
+def generate_validation_report(results, output_path):
+    """Write the validation / audit report for a reconcile_data() result.
+
+    The format depends on the file extension:
+      .json -> full machine-readable report (all rejected, duplicate and conflict records)
+      other -> readable text report (first rows of each table)
+
+    Returns the output path as a string once the report has been written.
+    """
+    required = {"summary", "rejected", "duplicates", "conflicts"}
+    if not isinstance(results, dict) or not required.issubset(results):
+        raise ValueError(f"results must be a reconcile_data() result containing {sorted(required)}")
+
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    generated_at = datetime.now().isoformat(timespec="seconds")
+    summary = results["summary"]
+
+    if output_path.suffix.lower() == ".json":
+        report = {
+            "generated_at": generated_at,
+            "summary": summary,
+            "rejected_records": json.loads(results["rejected"].to_json(orient="records")),
+            "duplicate_records": json.loads(results["duplicates"].to_json(orient="records")),
+            "conflicting_records": json.loads(results["conflicts"].to_json(orient="records")),
+        }
+        output_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
+        return str(output_path)
+
+    lines = [
+        "VALIDATION REPORT",
+        f"Generated: {generated_at}",
+        "",
+        "SUMMARY",
+        f"  Sources: {', '.join(summary['sources'])}",
+        f"  Total input records:       {summary['total_input_records']}",
+        f"  Rejected (invalid):        {summary['rejected_records']}",
+        f"  Exact duplicates removed:  {summary['duplicate_records_removed']}",
+        f"  Conflicting keys:          {summary['conflicting_keys']}"
+        f" ({summary['conflicting_records']} records quarantined)",
+        f"  Clean records:             {summary['clean_records']}",
+        "",
+        "PER SOURCE",
+    ]
+    for name, info in summary["per_source"].items():
+        lines.append(
+            f"  {name}: {info['total_records']} total, "
+            f"{info['valid_records']} valid, {info['rejected_records']} rejected"
+        )
+        for reason, count in info["reject_reasons"].items():
+            lines.append(f"      {reason}: {count}")
+    lines += [
+        "",
+        "REJECTED RECORDS",
+        _table_to_text(results["rejected"]),
+        "CONFLICTING RECORDS (same country and year, different values)",
+        _table_to_text(results["conflicts"]),
+        "EXACT DUPLICATES REMOVED",
+        _table_to_text(results["duplicates"]),
+    ]
+    output_path.write_text("\n".join(lines), encoding="utf-8")
+    return str(output_path)
