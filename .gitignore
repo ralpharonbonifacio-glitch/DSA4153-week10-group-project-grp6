@@ -218,3 +218,21 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Generated project outputs
+output/*
+
+# Keep output directory in Git
+!output/.gitkeep
+
+# Jupyter generated files
+*.nbconvert.ipynb
+
+# Temporary files
+*.tmp
+*.bak
+
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
