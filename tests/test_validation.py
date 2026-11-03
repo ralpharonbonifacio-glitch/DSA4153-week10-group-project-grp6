@@ -85,4 +85,102 @@ def test_out_of_range_values_are_rejected():
     assert result["valid"].empty
     assert len(result["rejected"]) == 5
 
-    
+def test_fractional_year_and_population_are_rejected():
+    df = make_df([
+        ["A", "Asia", 1952.5, 50.0, 100, 700.0],
+        ["B", "Asia", 1952, 50.0, 100.5, 700.0],
+    ])
+    result = validate_data(df)
+    reasons = result["rejected"]["reject_reason"].tolist()
+    assert "year: must be a whole number" in reasons[0]
+    assert "pop: must be a whole number" in reasons[1]
+
+
+def test_unsupported_continent_is_rejected():
+    df = make_df([["Atlantis", "Atlantica", 1952, 50.0, 100, 700.0]])
+    result = validate_data(df)
+    assert "continent: unsupported value" in result["rejected"]["reject_reason"].iloc[0]
+
+
+def test_multiple_problems_in_one_record_are_all_reported():
+    df = make_df([["", "Asia", 1952, 500.0, -1, 700.0]])
+    reason = validate_data(df)["rejected"]["reject_reason"].iloc[0]
+    assert "country: missing value" in reason
+    assert "lifeExp: above maximum" in reason
+    assert "pop: below minimum" in reason
+
+
+def test_valid_and_invalid_are_split_correctly():
+    rows = good_rows() + [["Bad", "Asia", 1952, 999.0, 100, 700.0]]
+    result = validate_data(make_df(rows))
+    assert len(result["valid"]) == 3
+    assert len(result["rejected"]) == 1
+    assert result["summary"]["total_records"] == 4
+
+
+def test_missing_column_raises_value_error():
+    with pytest.raises(ValueError):
+        validate_data(make_df(good_rows()).drop(columns=["pop"]))
+
+
+def test_non_dataframe_raises_type_error():
+    with pytest.raises(TypeError):
+        validate_data([1, 2, 3])
+
+
+def test_original_data_is_not_modified():
+    df = make_df(good_rows())
+    before = df.copy()
+    validate_data(df)
+    pd.testing.assert_frame_equal(df, before)
+
+
+def test_custom_rules_from_manifest():
+    manifest = {"validation_rules": {"year": {"min": 1952, "max": 2007}}}
+    rules = load_rules(manifest)
+    df = make_df([["A", "Asia", 2020, 50.0, 100, 700.0]])
+    assert validate_data(df, rules)["valid"].empty
+    assert len(validate_data(df)["valid"]) == 1
+
+
+# ---------- remove_duplicates ----------
+
+def test_remove_duplicates_removes_exact_copies():
+    rows = good_rows() + [good_rows()[0]]
+    unique, removed = remove_duplicates(make_df(rows))
+    assert len(unique) == 3
+    assert len(removed) == 1
+
+
+def test_remove_duplicates_keeps_different_values_for_same_key():
+    rows = good_rows() + [["Afghanistan", "Asia", 1952, 99.0, 8425333, 779.4453]]
+    unique, removed = remove_duplicates(make_df(rows))
+    assert len(unique) == 4
+    assert removed.empty
+
+
+def test_remove_duplicates_without_duplicates():
+    unique, removed = remove_duplicates(make_df(good_rows()))
+    assert len(unique) == 3
+    assert removed.empty
+
+
+# ---------- detect_conflicts ----------
+
+def test_detect_conflicts_finds_same_key_with_different_values():
+    rows = good_rows() + [["Afghanistan", "Asia", 1952, 35.0, 8425333, 779.4453]]
+    conflicts = detect_conflicts(make_df(rows))
+    assert len(conflicts) == 2
+    assert set(conflicts["country"]) == {"Afghanistan"}
+    assert set(conflicts["year"]) == {1952}
+
+
+def test_detect_conflicts_ignores_exact_duplicates():
+    rows = good_rows() + [good_rows()[0]]
+    assert detect_conflicts(make_df(rows)).empty
+
+
+def test_detect_conflicts_none():
+    conflicts = detect_conflicts(make_df(good_rows()))
+    assert conflicts.empty
+    assert list(conflicts.columns) == CANONICAL_COLUMNS
