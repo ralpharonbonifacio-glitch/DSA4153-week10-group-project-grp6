@@ -1,9 +1,4 @@
-"""Validation and duplicate / conflict detection (Member 3).
- 
-All functions work on pandas DataFrames that use the canonical columns:
-country, continent, year, lifeExp, pop, gdpPercap
-"""
- 
+
 from collections import Counter
  
 import numpy as np
