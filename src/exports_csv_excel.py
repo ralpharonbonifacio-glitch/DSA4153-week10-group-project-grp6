@@ -1,3 +1,4 @@
+
 """Export functions for CSV and Excel files."""
 
 from pathlib import Path
@@ -32,6 +33,7 @@ def export_to_excel(data, output_path):
 
     data.to_excel(
         output_path,
+        sheet_name="observations",
         index=False,
         engine="openpyxl"
     )
