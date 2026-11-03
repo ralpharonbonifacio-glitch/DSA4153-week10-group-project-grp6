@@ -42,3 +42,97 @@ def load_rules(manifest=None):
         else:
             rules[key] = value
     return rules
+
+def _check_input(data):
+    """Raise a clear error if data is not a DataFrame with all canonical columns."""
+    if not isinstance(data, pd.DataFrame):
+        raise TypeError("data must be a pandas DataFrame")
+    missing = [col for col in CANONICAL_COLUMNS if col not in data.columns]
+    if missing:
+        raise ValueError(f"Missing required columns: {missing}")
+
+
+def _blank_mask(series):
+    """True where a value is missing (NaN/None) or an empty / whitespace string."""
+    return series.isna() | series.astype(str).str.strip().eq("")
+
+
+def validate_data(data, rules=None):
+    """Check every record against the validation rules.
+
+    Parameters
+    ----------
+    data : pandas DataFrame with the six canonical columns.
+    rules : optional dict (see DEFAULT_RULES). Use load_rules(manifest) to build it.
+
+    Returns
+    -------
+    dict with:
+        "valid"    - DataFrame, canonical columns only, with the correct dtypes
+        "rejected" - DataFrame, original columns + "reject_reason"
+        "summary"  - dict with record counts and a count per reject reason
+    """
+    _check_input(data)
+    rules = rules if rules is not None else load_rules()
+    df = data.copy()
+    reasons = [[] for _ in range(len(df))]
+
+    def flag(mask, message):
+        for position in np.flatnonzero(np.asarray(mask)):
+            reasons[position].append(message)
+
+    for col in TEXT_COLUMNS:
+        flag(_blank_mask(df[col]), f"{col}: missing value")
+
+    allowed = rules.get("allowed_continents")
+    if allowed:
+        continent_text = df["continent"].astype(str).str.strip()
+        unsupported = ~_blank_mask(df["continent"]) & ~continent_text.isin(allowed)
+        flag(unsupported, "continent: unsupported value")
+
+    numeric_values = {}
+    for col in NUMERIC_COLUMNS:
+        blank = _blank_mask(df[col])
+        numbers = pd.to_numeric(df[col], errors="coerce")
+        numbers = numbers.replace([np.inf, -np.inf], np.nan)
+        numeric_values[col] = numbers
+
+        flag(blank, f"{col}: missing value")
+        flag(~blank & numbers.isna(), f"{col}: not a valid number")
+
+        has_number = numbers.notna()
+        if col in INTEGER_COLUMNS:
+            flag(has_number & (numbers % 1 != 0), f"{col}: must be a whole number")
+
+        col_rules = rules.get(col, {})
+        if "min" in col_rules:
+            flag(has_number & (numbers < col_rules["min"]),
+                 f"{col}: below minimum {col_rules['min']}")
+        if "max" in col_rules:
+            flag(has_number & (numbers > col_rules["max"]),
+                 f"{col}: above maximum {col_rules['max']}")
+
+    is_valid = np.array([len(item) == 0 for item in reasons], dtype=bool)
+
+    valid = df.loc[is_valid, CANONICAL_COLUMNS].copy()
+    for col in TEXT_COLUMNS:
+        valid[col] = valid[col].astype(str).str.strip()
+    for col in NUMERIC_COLUMNS:
+        values = numeric_values[col][is_valid]
+        valid[col] = values.astype("int64") if col in INTEGER_COLUMNS else values.astype("float64")
+
+    rejected = df.loc[~is_valid].copy()
+    rejected["reject_reason"] = [
+        "; ".join(item) for item, ok in zip(reasons, is_valid) if not ok
+    ]
+
+    reason_counts = Counter(
+        message for item in reasons for message in item
+    )
+    summary = {
+        "total_records": int(len(df)),
+        "valid_records": int(is_valid.sum()),
+        "rejected_records": int((~is_valid).sum()),
+        "reject_reasons": dict(reason_counts),
+    }
+    return {"valid": valid, "rejected": rejected, "summary": summary}
