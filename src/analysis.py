@@ -62,3 +62,37 @@ def analyze_gdp(data):
     gdp = data.groupby("year")["gdpPercap"].mean()
 
     return gdp.reset_index(name="average_gdp_per_capita")
+
+def generate_continent_summary(data):
+    """
+    Generates summary statistics grouped by continent.
+
+    Returns:
+        DataFrame: Average life expectancy, population,
+        and GDP per capita for each continent.
+    """
+
+    continent_summary = data.groupby("continent").agg({
+        "lifeExp": "mean",
+        "pop": "mean",
+        "gdpPercap": "mean"
+    })
+
+    return continent_summary.reset_index()
+
+def analyze_yearly_trends(data):
+    """
+    Analyzes yearly changes in life expectancy,
+    population, and GDP per capita.
+
+    Returns:
+        DataFrame: Average values grouped by year.
+    """
+
+    yearly_trends = data.groupby("year").agg({
+        "lifeExp": "mean",
+        "pop": "sum",
+        "gdpPercap": "mean"
+    })
+
+    return yearly_trends.reset_index()
