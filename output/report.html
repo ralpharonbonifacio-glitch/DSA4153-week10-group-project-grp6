@@ -7862,7 +7862,8 @@ a.anchor-link {
     <span class="n">build_population_matrix</span><span class="p">,</span>
     <span class="n">index_by_broadcast</span><span class="p">,</span>
     <span class="n">index_by_loop</span><span class="p">,</span>
-    <span class="n">generate_country_summary</span>
+    <span class="n">generate_country_summary</span><span class="p">,</span>
+    <span class="n">generate_population_index</span>
 <span class="p">)</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">src.analysis_exports</span><span class="w"> </span><span class="kn">import</span> <span class="n">export_analysis_results</span>
@@ -10211,6 +10212,979 @@ Index Matrix Shape: (142, 12)
 </div>
 </div>
 </div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=f6e2628f">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Required-Population-Matrix:-Philippines,-Indonesia,-and-Thailand">Required Population Matrix: Philippines, Indonesia, and Thailand<a class="anchor-link" href="#Required-Population-Matrix:-Philippines,-Indonesia,-and-Thailand">¶</a></h3><p>This section constructs the required population matrix for the Philippines, Indonesia, and Thailand from 1982 to 2007. Each row represents a country, while each column represents an observation year.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=335b1424">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [18]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Define the required countries and years</span>
+<span class="n">selected_countries</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"Philippines"</span><span class="p">,</span> <span class="s2">"Indonesia"</span><span class="p">,</span> <span class="s2">"Thailand"</span><span class="p">]</span>
+<span class="n">selected_years</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1982</span><span class="p">,</span> <span class="mi">1987</span><span class="p">,</span> <span class="mi">1992</span><span class="p">,</span> <span class="mi">1997</span><span class="p">,</span> <span class="mi">2002</span><span class="p">,</span> <span class="mi">2007</span><span class="p">]</span>
+
+<span class="c1"># Build the required 3 x 6 population matrix</span>
+<span class="n">required_population_matrix</span> <span class="o">=</span> <span class="n">build_population_matrix</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">selected_countries</span><span class="p">,</span>
+    <span class="n">selected_years</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Required Population Matrix Shape:"</span><span class="p">,</span> <span class="n">required_population_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="c1"># Display the population matrix</span>
+<span class="n">required_population_table</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="n">required_population_matrix</span><span class="p">,</span>
+    <span class="n">index</span><span class="o">=</span><span class="n">selected_countries</span><span class="p">,</span>
+    <span class="n">columns</span><span class="o">=</span><span class="n">selected_years</span>
+<span class="p">)</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">required_population_table</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Required Population Matrix Shape: (3, 6)
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>1982</th>
+<th>1987</th>
+<th>1992</th>
+<th>1997</th>
+<th>2002</th>
+<th>2007</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>Philippines</th>
+<td>53456774</td>
+<td>60017788</td>
+<td>67185766</td>
+<td>75012988</td>
+<td>82995088</td>
+<td>91077287</td>
+</tr>
+<tr>
+<th>Indonesia</th>
+<td>153343000</td>
+<td>169276000</td>
+<td>184816000</td>
+<td>199278000</td>
+<td>211060000</td>
+<td>223547000</td>
+</tr>
+<tr>
+<th>Thailand</th>
+<td>48827160</td>
+<td>52910342</td>
+<td>56667095</td>
+<td>60216677</td>
+<td>62806748</td>
+<td>65068149</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=26317be4">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Interpretation">Interpretation<a class="anchor-link" href="#Interpretation">¶</a></h3><p>The population matrix shows that all three countries experienced population growth from 1982 to 2007. Indonesia consistently had the largest population, followed by the Philippines and Thailand. The Philippines increased from 53,456,774 in 1982 to 91,077,287 in 2007, while Indonesia grew from 153,343,000 to 223,547,000. Thailand also showed steady growth, increasing from 48,827,160 to 65,068,149. These values will serve as the basis for calculating the population index of each country using 1982 as the baseline year.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=073adef2">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Required-Population-Index-Using-Broadcasting">Required Population Index Using Broadcasting<a class="anchor-link" href="#Required-Population-Index-Using-Broadcasting">¶</a></h3><p>The population index uses 1982 as the baseline year. NumPy broadcasting divides each population value by its corresponding country's 1982 population and multiplies the result by 100.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=b6b7ebec">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [19]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Calculate population index using broadcasting</span>
+<span class="n">required_broadcast_index</span><span class="p">,</span> <span class="n">baseline_shape</span><span class="p">,</span> <span class="n">index_shape</span> <span class="o">=</span> <span class="n">index_by_broadcast</span><span class="p">(</span>
+    <span class="n">required_population_matrix</span><span class="p">,</span>
+    <span class="mi">0</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Baseline Shape:"</span><span class="p">,</span> <span class="n">baseline_shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Index Matrix Shape:"</span><span class="p">,</span> <span class="n">index_shape</span><span class="p">)</span>
+
+<span class="c1"># Calculate population index using nested loops</span>
+<span class="n">required_loop_index</span> <span class="o">=</span> <span class="n">index_by_loop</span><span class="p">(</span>
+    <span class="n">required_population_matrix</span><span class="p">,</span>
+    <span class="mi">0</span>
+<span class="p">)</span>
+
+<span class="c1"># Compare both calculations</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="s2">"Broadcasting and Loop Results Match:"</span><span class="p">,</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">required_broadcast_index</span><span class="p">,</span> <span class="n">required_loop_index</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># Verify that all 1982 index values equal 100</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="s2">"All 1982 Index Values Equal 100:"</span><span class="p">,</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">required_broadcast_index</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="mi">100</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># Display the population index</span>
+<span class="n">required_population_index</span> <span class="o">=</span> <span class="n">generate_population_index</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">required_population_index</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Baseline Shape: (3, 1)
+Index Matrix Shape: (3, 6)
+Broadcasting and Loop Results Match: True
+All 1982 Index Values Equal 100: True
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>country</th>
+<th>1982</th>
+<th>1987</th>
+<th>1992</th>
+<th>1997</th>
+<th>2002</th>
+<th>2007</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>0</th>
+<td>Philippines</td>
+<td>100.0</td>
+<td>112.27</td>
+<td>125.68</td>
+<td>140.32</td>
+<td>155.26</td>
+<td>170.38</td>
+</tr>
+<tr>
+<th>1</th>
+<td>Indonesia</td>
+<td>100.0</td>
+<td>110.39</td>
+<td>120.52</td>
+<td>129.96</td>
+<td>137.64</td>
+<td>145.78</td>
+</tr>
+<tr>
+<th>2</th>
+<td>Thailand</td>
+<td>100.0</td>
+<td>108.36</td>
+<td>116.06</td>
+<td>123.33</td>
+<td>128.63</td>
+<td>133.26</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=a0ad181a">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Interpretation">Interpretation<a class="anchor-link" href="#Interpretation">¶</a></h3><p>The population index shows the relative population growth of the Philippines, Indonesia, and Thailand from 1982 to 2007, using 1982 as the baseline year (100). All three countries recorded an increase in their population index throughout the period. The Philippines had the highest relative growth, reaching 170.38 in 2007, which indicates a 70.38% increase compared with its 1982 population. Indonesia reached 145.78, while Thailand reached 133.26. This shows that although Indonesia had the largest actual population, the Philippines experienced the greatest percentage increase among the three countries.</p>
+<p>The broadcasting calculation used a baseline shape of (3, 1) and produced an index matrix with a shape of (3, 6). The results matched the independent loop calculation, and all three countries had an index value of 100 in 1982, confirming the correctness of the calculation.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=477349e4">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Asia-Selected-Year-Analysis">Asia Selected-Year Analysis<a class="anchor-link" href="#Asia-Selected-Year-Analysis">¶</a></h3><p>This section selects the Asian countries with available observations for the configured reporting year. It also calculates population in millions and ranks countries based on their life expectancy, using descending order.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=2b1f2f47">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [20]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Set the reporting year</span>
+<span class="n">selected_year</span> <span class="o">=</span> <span class="mi">2007</span>
+
+<span class="c1"># Select Asian countries for the reporting year</span>
+<span class="n">asia_selected_year</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+    <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">"continent"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"Asia"</span><span class="p">)</span> <span class="o">&amp;</span>
+    <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">"year"</span><span class="p">]</span> <span class="o">==</span> <span class="n">selected_year</span><span class="p">)</span>
+<span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="c1"># Convert population into millions</span>
+<span class="n">asia_selected_year</span><span class="p">[</span><span class="s2">"pop_millions"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">asia_selected_year</span><span class="p">[</span><span class="s2">"pop"</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1_000_000</span>
+<span class="p">)</span>
+
+<span class="c1"># Rank countries by descending life expectancy</span>
+<span class="n">asia_selected_year</span><span class="p">[</span><span class="s2">"lifeExp_rank"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">asia_selected_year</span><span class="p">[</span><span class="s2">"lifeExp"</span><span class="p">]</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span>
+        <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="s2">"min"</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">asia_selected_year</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>country</th>
+<th>continent</th>
+<th>year</th>
+<th>lifeExp</th>
+<th>pop</th>
+<th>gdpPercap</th>
+<th>pop_millions</th>
+<th>lifeExp_rank</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>11</th>
+<td>Afghanistan</td>
+<td>Asia</td>
+<td>2007</td>
+<td>43.828</td>
+<td>31889923</td>
+<td>974.580338</td>
+<td>31.889923</td>
+<td>33.0</td>
+</tr>
+<tr>
+<th>95</th>
+<td>Bahrain</td>
+<td>Asia</td>
+<td>2007</td>
+<td>75.635</td>
+<td>708573</td>
+<td>29796.048340</td>
+<td>0.708573</td>
+<td>9.0</td>
+</tr>
+<tr>
+<th>107</th>
+<td>Bangladesh</td>
+<td>Asia</td>
+<td>2007</td>
+<td>64.062</td>
+<td>150448339</td>
+<td>1391.253792</td>
+<td>150.448339</td>
+<td>27.0</td>
+</tr>
+<tr>
+<th>227</th>
+<td>Cambodia</td>
+<td>Asia</td>
+<td>2007</td>
+<td>59.723</td>
+<td>14131858</td>
+<td>1713.778686</td>
+<td>14.131858</td>
+<td>31.0</td>
+</tr>
+<tr>
+<th>299</th>
+<td>China</td>
+<td>Asia</td>
+<td>2007</td>
+<td>72.961</td>
+<td>1318683096</td>
+<td>4959.114854</td>
+<td>1318.683096</td>
+<td>14.0</td>
+</tr>
+<tr>
+<th>671</th>
+<td>Hong Kong, China</td>
+<td>Asia</td>
+<td>2007</td>
+<td>82.208</td>
+<td>6980412</td>
+<td>39724.978670</td>
+<td>6.980412</td>
+<td>2.0</td>
+</tr>
+<tr>
+<th>707</th>
+<td>India</td>
+<td>Asia</td>
+<td>2007</td>
+<td>64.698</td>
+<td>1110396331</td>
+<td>2452.210407</td>
+<td>1110.396331</td>
+<td>26.0</td>
+</tr>
+<tr>
+<th>719</th>
+<td>Indonesia</td>
+<td>Asia</td>
+<td>2007</td>
+<td>70.650</td>
+<td>223547000</td>
+<td>3540.651564</td>
+<td>223.547000</td>
+<td>21.0</td>
+</tr>
+<tr>
+<th>731</th>
+<td>Iran</td>
+<td>Asia</td>
+<td>2007</td>
+<td>70.964</td>
+<td>69453570</td>
+<td>11605.714490</td>
+<td>69.453570</td>
+<td>20.0</td>
+</tr>
+<tr>
+<th>743</th>
+<td>Iraq</td>
+<td>Asia</td>
+<td>2007</td>
+<td>59.545</td>
+<td>27499638</td>
+<td>4471.061906</td>
+<td>27.499638</td>
+<td>32.0</td>
+</tr>
+<tr>
+<th>767</th>
+<td>Israel</td>
+<td>Asia</td>
+<td>2007</td>
+<td>80.745</td>
+<td>6426679</td>
+<td>25523.277100</td>
+<td>6.426679</td>
+<td>3.0</td>
+</tr>
+<tr>
+<th>803</th>
+<td>Japan</td>
+<td>Asia</td>
+<td>2007</td>
+<td>82.603</td>
+<td>127467972</td>
+<td>31656.068060</td>
+<td>127.467972</td>
+<td>1.0</td>
+</tr>
+<tr>
+<th>815</th>
+<td>Jordan</td>
+<td>Asia</td>
+<td>2007</td>
+<td>72.535</td>
+<td>6053193</td>
+<td>4519.461171</td>
+<td>6.053193</td>
+<td>16.0</td>
+</tr>
+<tr>
+<th>839</th>
+<td>Korea, Dem. Rep.</td>
+<td>Asia</td>
+<td>2007</td>
+<td>67.297</td>
+<td>23301725</td>
+<td>1593.065480</td>
+<td>23.301725</td>
+<td>23.0</td>
+</tr>
+<tr>
+<th>851</th>
+<td>Korea, Rep.</td>
+<td>Asia</td>
+<td>2007</td>
+<td>78.623</td>
+<td>49044790</td>
+<td>23348.139730</td>
+<td>49.044790</td>
+<td>5.0</td>
+</tr>
+<tr>
+<th>863</th>
+<td>Kuwait</td>
+<td>Asia</td>
+<td>2007</td>
+<td>77.588</td>
+<td>2505559</td>
+<td>47306.989780</td>
+<td>2.505559</td>
+<td>7.0</td>
+</tr>
+<tr>
+<th>875</th>
+<td>Lebanon</td>
+<td>Asia</td>
+<td>2007</td>
+<td>71.993</td>
+<td>3921278</td>
+<td>10461.058680</td>
+<td>3.921278</td>
+<td>18.0</td>
+</tr>
+<tr>
+<th>947</th>
+<td>Malaysia</td>
+<td>Asia</td>
+<td>2007</td>
+<td>74.241</td>
+<td>24821286</td>
+<td>12451.655800</td>
+<td>24.821286</td>
+<td>11.0</td>
+</tr>
+<tr>
+<th>1007</th>
+<td>Mongolia</td>
+<td>Asia</td>
+<td>2007</td>
+<td>66.803</td>
+<td>2874127</td>
+<td>3095.772271</td>
+<td>2.874127</td>
+<td>24.0</td>
+</tr>
+<tr>
+<th>1055</th>
+<td>Myanmar</td>
+<td>Asia</td>
+<td>2007</td>
+<td>62.069</td>
+<td>47761980</td>
+<td>944.000000</td>
+<td>47.761980</td>
+<td>30.0</td>
+</tr>
+<tr>
+<th>1079</th>
+<td>Nepal</td>
+<td>Asia</td>
+<td>2007</td>
+<td>63.785</td>
+<td>28901790</td>
+<td>1091.359778</td>
+<td>28.901790</td>
+<td>28.0</td>
+</tr>
+<tr>
+<th>1163</th>
+<td>Oman</td>
+<td>Asia</td>
+<td>2007</td>
+<td>75.640</td>
+<td>3204897</td>
+<td>22316.192870</td>
+<td>3.204897</td>
+<td>8.0</td>
+</tr>
+<tr>
+<th>1175</th>
+<td>Pakistan</td>
+<td>Asia</td>
+<td>2007</td>
+<td>65.483</td>
+<td>169270617</td>
+<td>2605.947580</td>
+<td>169.270617</td>
+<td>25.0</td>
+</tr>
+<tr>
+<th>1223</th>
+<td>Philippines</td>
+<td>Asia</td>
+<td>2007</td>
+<td>71.688</td>
+<td>91077287</td>
+<td>3190.481016</td>
+<td>91.077287</td>
+<td>19.0</td>
+</tr>
+<tr>
+<th>1319</th>
+<td>Saudi Arabia</td>
+<td>Asia</td>
+<td>2007</td>
+<td>72.777</td>
+<td>27601038</td>
+<td>21654.831940</td>
+<td>27.601038</td>
+<td>15.0</td>
+</tr>
+<tr>
+<th>1367</th>
+<td>Singapore</td>
+<td>Asia</td>
+<td>2007</td>
+<td>79.972</td>
+<td>4553009</td>
+<td>47143.179640</td>
+<td>4.553009</td>
+<td>4.0</td>
+</tr>
+<tr>
+<th>1439</th>
+<td>Sri Lanka</td>
+<td>Asia</td>
+<td>2007</td>
+<td>72.396</td>
+<td>20378239</td>
+<td>3970.095407</td>
+<td>20.378239</td>
+<td>17.0</td>
+</tr>
+<tr>
+<th>1499</th>
+<td>Syria</td>
+<td>Asia</td>
+<td>2007</td>
+<td>74.143</td>
+<td>19314747</td>
+<td>4184.548089</td>
+<td>19.314747</td>
+<td>12.0</td>
+</tr>
+<tr>
+<th>1511</th>
+<td>Taiwan</td>
+<td>Asia</td>
+<td>2007</td>
+<td>78.400</td>
+<td>23174294</td>
+<td>28718.276840</td>
+<td>23.174294</td>
+<td>6.0</td>
+</tr>
+<tr>
+<th>1535</th>
+<td>Thailand</td>
+<td>Asia</td>
+<td>2007</td>
+<td>70.616</td>
+<td>65068149</td>
+<td>7458.396327</td>
+<td>65.068149</td>
+<td>22.0</td>
+</tr>
+<tr>
+<th>1655</th>
+<td>Vietnam</td>
+<td>Asia</td>
+<td>2007</td>
+<td>74.249</td>
+<td>85262356</td>
+<td>2441.576404</td>
+<td>85.262356</td>
+<td>10.0</td>
+</tr>
+<tr>
+<th>1667</th>
+<td>West Bank and Gaza</td>
+<td>Asia</td>
+<td>2007</td>
+<td>73.422</td>
+<td>4018332</td>
+<td>3025.349798</td>
+<td>4.018332</td>
+<td>13.0</td>
+</tr>
+<tr>
+<th>1679</th>
+<td>Yemen, Rep.</td>
+<td>Asia</td>
+<td>2007</td>
+<td>62.698</td>
+<td>22211743</td>
+<td>2280.769906</td>
+<td>22.211743</td>
+<td>29.0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=5c5d97d7">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Interpretation">Interpretation<a class="anchor-link" href="#Interpretation">¶</a></h3><p>The Asia selected-year analysis includes 33 countries with available observations in 2007. Japan recorded the highest life expectancy at 82.603 years, followed by Hong Kong, China at 82.208 years, and Israel at 80.745 years. Meanwhile, Afghanistan had the lowest life expectancy at 43.828 years. The Philippines ranked 19th with a life expectancy of 71.688 years. These results show differences in life expectancy across the selected Asian countries. The population in millions column also provides a more readable representation of each country's population size.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=35586346">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Philippines-Country-History">Philippines Country History<a class="anchor-link" href="#Philippines-Country-History">¶</a></h3><p>This section examines the historical population and life expectancy of the Philippines from 1952 to 2007. It includes population in millions and the change in life expectancy compared with the first recorded year.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c9dc8b40">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [21]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Select all observations for the Philippines</span>
+<span class="n">country_history</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">"country"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"Philippines"</span>
+<span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="c1"># Sort observations by year</span>
+<span class="n">country_history</span> <span class="o">=</span> <span class="n">country_history</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">"year"</span><span class="p">)</span>
+
+<span class="c1"># Convert population into millions</span>
+<span class="n">country_history</span><span class="p">[</span><span class="s2">"pop_millions"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">country_history</span><span class="p">[</span><span class="s2">"pop"</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1_000_000</span>
+<span class="p">)</span>
+
+<span class="c1"># Calculate life expectancy change from the first recorded year</span>
+<span class="n">country_history</span><span class="p">[</span><span class="s2">"lifeExp_change"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">country_history</span><span class="p">[</span><span class="s2">"lifeExp"</span><span class="p">]</span> <span class="o">-</span> <span class="n">country_history</span><span class="p">[</span><span class="s2">"lifeExp"</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">country_history</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>country</th>
+<th>continent</th>
+<th>year</th>
+<th>lifeExp</th>
+<th>pop</th>
+<th>gdpPercap</th>
+<th>pop_millions</th>
+<th>lifeExp_change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>1212</th>
+<td>Philippines</td>
+<td>Asia</td>
+<td>1952</td>
+<td>47.752</td>
+<td>22438691</td>
+<td>1272.880995</td>
+<td>22.438691</td>
+<td>0.000</td>
+</tr>
+<tr>
+<th>1213</th>
+<td>Philippines</td>
+<td>Asia</td>
+<td>1957</td>
+<td>51.334</td>
+<td>26072194</td>
+<td>1547.944844</td>
+<td>26.072194</td>
+<td>3.582</td>
+</tr>
+<tr>
+<th>1214</th>
+<td>Philippines</td>
+<td>Asia</td>
+<td>1962</td>
+<td>54.757</td>
+<td>30325264</td>
+<td>1649.552153</td>
+<td>30.325264</td>
+<td>7.005</td>
+</tr>
+<tr>
+<th>1215</th>
+<td>Philippines</td>
+<td>Asia</td>
+<td>1967</td>
+<td>56.393</td>
+<td>35356600</td>
+<td>1814.127430</td>
+<td>35.356600</td>
+<td>8.641</td>
+</tr>
+<tr>
+<th>1216</th>
+<td>Philippines</td>
+<td>Asia</td>
+<td>1972</td>
+<td>58.065</td>
+<td>40850141</td>
+<td>1989.374070</td>
+<td>40.850141</td>
+<td>10.313</td>
+</tr>
+<tr>
+<th>1217</th>
+<td>Philippines</td>
+<td>Asia</td>
+<td>1977</td>
+<td>60.060</td>
+<td>46850962</td>
+<td>2373.204287</td>
+<td>46.850962</td>
+<td>12.308</td>
+</tr>
+<tr>
+<th>1218</th>
+<td>Philippines</td>
+<td>Asia</td>
+<td>1982</td>
+<td>62.082</td>
+<td>53456774</td>
+<td>2603.273765</td>
+<td>53.456774</td>
+<td>14.330</td>
+</tr>
+<tr>
+<th>1219</th>
+<td>Philippines</td>
+<td>Asia</td>
+<td>1987</td>
+<td>64.151</td>
+<td>60017788</td>
+<td>2189.634995</td>
+<td>60.017788</td>
+<td>16.399</td>
+</tr>
+<tr>
+<th>1220</th>
+<td>Philippines</td>
+<td>Asia</td>
+<td>1992</td>
+<td>66.458</td>
+<td>67185766</td>
+<td>2279.324017</td>
+<td>67.185766</td>
+<td>18.706</td>
+</tr>
+<tr>
+<th>1221</th>
+<td>Philippines</td>
+<td>Asia</td>
+<td>1997</td>
+<td>68.564</td>
+<td>75012988</td>
+<td>2536.534925</td>
+<td>75.012988</td>
+<td>20.812</td>
+</tr>
+<tr>
+<th>1222</th>
+<td>Philippines</td>
+<td>Asia</td>
+<td>2002</td>
+<td>70.303</td>
+<td>82995088</td>
+<td>2650.921068</td>
+<td>82.995088</td>
+<td>22.551</td>
+</tr>
+<tr>
+<th>1223</th>
+<td>Philippines</td>
+<td>Asia</td>
+<td>2007</td>
+<td>71.688</td>
+<td>91077287</td>
+<td>3190.481016</td>
+<td>91.077287</td>
+<td>23.936</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=d8b47531">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Interpretation">Interpretation<a class="anchor-link" href="#Interpretation">¶</a></h3><p>The historical data shows a consistent increase in the population and life expectancy of the Philippines from 1952 to 2007. Life expectancy increased from 47.752 years in 1952 to 71.688 years in 2007, representing an overall improvement of 23.936 years. Meanwhile, the population grew from approximately 22.44 million to 91.08 million. The life expectancy change column shows the difference between each year's life expectancy and the initial value recorded in 1952. These results highlight the country's population growth and improvement in life expectancy throughout the 55-year period.</p>
+</div>
+</div>
+</div>
+</div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c24afe84">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -10226,7 +11200,7 @@ Index Matrix Shape: (142, 12)
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [18]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [22]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Create output directory if it does not exist</span>
@@ -10269,6 +11243,21 @@ Index Matrix Shape: (142, 12)
     <span class="n">output_directory</span> <span class="o">/</span> <span class="s2">"yearly_trends.csv"</span>
 <span class="p">)</span>
 
+<span class="n">export_analysis_results</span><span class="p">(</span>
+    <span class="n">asia_selected_year</span><span class="p">,</span>
+    <span class="n">output_directory</span> <span class="o">/</span> <span class="s2">"asia_selected_year.csv"</span>
+<span class="p">)</span>
+
+<span class="n">export_analysis_results</span><span class="p">(</span>
+    <span class="n">country_history</span><span class="p">,</span>
+    <span class="n">output_directory</span> <span class="o">/</span> <span class="s2">"country_history.csv"</span>
+<span class="p">)</span>
+
+<span class="n">export_analysis_results</span><span class="p">(</span>
+    <span class="n">required_population_index</span><span class="p">,</span>
+    <span class="n">output_directory</span> <span class="o">/</span> <span class="s2">"population_index.csv"</span>
+<span class="p">)</span>
+
 <span class="nb">print</span><span class="p">(</span><span class="s2">"Analysis results exported successfully."</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -10296,13 +11285,13 @@ Index Matrix Shape: (142, 12)
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">¶</a></h2><p>The analysis successfully examined country-level data from 1952 to 2007 using Pandas and NumPy. The results showed overall increases in average life expectancy, combined population, and average GDP per capita throughout the observed period.</p>
-<p>The continent-level and country-level comparisons also revealed differences in life expectancy, population, and GDP per capita across geographical areas. These findings demonstrate that development patterns varied among countries and continents.</p>
-<p>The NumPy analysis further demonstrated how population data can be organized into matrices and processed using broadcasting and nested loops. Both implementations produced equivalent population index results, while broadcasting provided a more direct approach to array calculations.</p>
-<p>Finally, the analysis results were successfully exported into CSV files for future use. Overall, the project demonstrated how data analysis and numerical computing techniques can be applied to organize, examine, compare, and summarize large datasets.</p>
+<p>The continent-level and country-level comparisons also revealed differences in life expectancy, population, and GDP per capita across geographical areas. The Asia selected-year analysis further highlighted differences in life expectancy among 33 Asian countries in 2007, while the Philippines country history showed improvements in population and life expectancy from 1952 to 2007.</p>
+<p>The NumPy analysis further demonstrated how population data can be organized into matrices and processed using broadcasting and nested loops. The population index compared the Philippines, Indonesia, and Thailand using 1982 as the baseline year. Both implementations produced equivalent results, while broadcasting provided a more direct approach to array calculations.</p>
+<p>Finally, all ten analytical results were successfully exported into CSV files for future use. Overall, the project demonstrated how data analysis and numerical computing techniques can be applied to organize, examine, compare, and summarize large datasets.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=6a53e800">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=5767533a">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
