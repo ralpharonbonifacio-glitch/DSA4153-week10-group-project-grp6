@@ -1,3 +1,4 @@
+
 import numpy as np
 import pandas as pd
 
@@ -26,6 +27,47 @@ def create_sample_data():
         "lifeExp": [70.0, 82.0, 72.0, 83.0],
         "pop": [80000000, 127000000, 91000000, 128000000],
         "gdpPercap": [2000.0, 30000.0, 2500.0, 32000.0]
+    })
+
+
+# Sample data for the required 3 x 6 NumPy matrix
+def create_population_matrix_data():
+    countries = ["Philippines", "Indonesia", "Thailand"]
+    years = [1982, 1987, 1992, 1997, 2002, 2007]
+
+    populations = [
+        [50000000, 56000000, 62000000, 68000000, 76000000, 91000000],
+        [150000000, 165000000, 185000000, 200000000, 215000000, 225000000],
+        [48000000, 52000000, 56000000, 60000000, 64000000, 67000000]
+    ]
+
+    records = []
+
+    for i, country in enumerate(countries):
+        for j, year in enumerate(years):
+            records.append({
+                "country": country,
+                "continent": "Asia",
+                "year": year,
+                "lifeExp": 60.0 + j,
+                "pop": populations[i][j],
+                "gdpPercap": 2000.0 + (j * 100)
+            })
+
+    return pd.DataFrame(records)
+
+
+# ASample data for the expected Asian population total
+def create_asia_2007_data():
+    populations = [100000000] * 32 + [611953827]
+
+    return pd.DataFrame({
+        "country": [f"Country{i}" for i in range(33)],
+        "continent": ["Asia"] * 33,
+        "year": [2007] * 33,
+        "lifeExp": [60.0] * 33,
+        "pop": populations,
+        "gdpPercap": [2000.0] * 33
     })
 
 
@@ -94,6 +136,7 @@ def test_export_analysis_results(tmp_path):
     assert result is True
     assert len(exported_data) == 4
 
+
 def test_region_population_numpy():
     data = create_sample_data()
 
@@ -126,6 +169,7 @@ def test_index_by_broadcast():
 
     assert baseline_shape == (2, 1)
     assert result_shape == (2, 3)
+
     np.testing.assert_array_equal(
         result,
         [[100, 200, 300], [100, 200, 300]]
@@ -145,6 +189,7 @@ def test_index_by_loop():
         [[100, 200, 300], [100, 200, 300]]
     )
 
+
 def test_generate_country_summary():
     data = create_sample_data()
 
@@ -157,3 +202,71 @@ def test_generate_country_summary():
     assert philippines.iloc[0]["lifeExp"] == 71.0
     assert philippines.iloc[0]["pop"] == 85500000
     assert philippines.iloc[0]["gdpPercap"] == 2250.0
+
+
+# Test the required 3 x 6 population matrix
+def test_required_population_matrix():
+    data = create_population_matrix_data()
+
+    countries = ["Philippines", "Indonesia", "Thailand"]
+    years = [1982, 1987, 1992, 1997, 2002, 2007]
+
+    result = build_population_matrix(data, countries, years)
+
+    assert result.shape == (3, 6)
+
+    assert result[0, 0] == 50000000
+    assert result[1, 0] == 150000000
+    assert result[2, 0] == 48000000
+
+
+# Test the 1982 baseline and broadcasting shapes
+def test_required_population_broadcasting():
+    data = create_population_matrix_data()
+
+    countries = ["Philippines", "Indonesia", "Thailand"]
+    years = [1982, 1987, 1992, 1997, 2002, 2007]
+
+    matrix = build_population_matrix(data, countries, years)
+
+    result, baseline_shape, result_shape = index_by_broadcast(matrix, 0)
+
+    assert baseline_shape == (3, 1)
+    assert result_shape == (3, 6)
+
+    np.testing.assert_array_equal(
+        result[:, 0],
+        [100.0, 100.0, 100.0]
+    )
+
+
+# Verify broadcasting against an independent loop calculation
+def test_required_broadcast_matches_loop():
+    data = create_population_matrix_data()
+
+    countries = ["Philippines", "Indonesia", "Thailand"]
+    years = [1982, 1987, 1992, 1997, 2002, 2007]
+
+    matrix = build_population_matrix(data, countries, years)
+
+    broadcast_result, _, _ = index_by_broadcast(matrix, 0)
+    loop_result = index_by_loop(matrix, 0)
+
+    np.testing.assert_allclose(
+        broadcast_result,
+        loop_result
+    )
+
+
+# Test the expected 2007 Asian population calculation
+def test_asia_population_2007_expected_total():
+    data = create_asia_2007_data()
+
+    country_count, total_population = region_population_numpy(
+        data,
+        "Asia",
+        2007
+    )
+
+    assert country_count == 33
+    assert total_population == 3811953827

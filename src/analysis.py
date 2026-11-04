@@ -1,3 +1,4 @@
+
 """
 Data Analysis Module
 
@@ -8,7 +9,8 @@ country-level data using pandas and NumPy.
 import pandas as pd
 import numpy as np
 
-def generate_descriptive_statistics(data):
+
+def generate_descriptive_statistics(data: pd.DataFrame) -> pd.DataFrame:
     """
     Generates descriptive statistics for the numerical columns.
 
@@ -27,7 +29,8 @@ def generate_descriptive_statistics(data):
 
     return statistics
 
-def analyze_life_expectancy(data):
+
+def analyze_life_expectancy(data: pd.DataFrame) -> pd.DataFrame:
     """
     Analyzes life expectancy across countries and years.
 
@@ -39,7 +42,8 @@ def analyze_life_expectancy(data):
 
     return life_expectancy.reset_index(name="average_life_expectancy")
 
-def analyze_population(data):
+
+def analyze_population(data: pd.DataFrame) -> pd.DataFrame:
     """
     Analyzes total population across years.
 
@@ -51,7 +55,8 @@ def analyze_population(data):
 
     return population.reset_index(name="total_population")
 
-def analyze_gdp(data):
+
+def analyze_gdp(data: pd.DataFrame) -> pd.DataFrame:
     """
     Analyzes average GDP per capita across years.
 
@@ -63,7 +68,8 @@ def analyze_gdp(data):
 
     return gdp.reset_index(name="average_gdp_per_capita")
 
-def generate_continent_summary(data):
+
+def generate_continent_summary(data: pd.DataFrame) -> pd.DataFrame:
     """
     Generates summary statistics grouped by continent.
 
@@ -80,7 +86,8 @@ def generate_continent_summary(data):
 
     return continent_summary.reset_index()
 
-def analyze_yearly_trends(data):
+
+def analyze_yearly_trends(data: pd.DataFrame) -> pd.DataFrame:
     """
     Analyzes yearly changes in life expectancy,
     population, and GDP per capita.
@@ -97,7 +104,12 @@ def analyze_yearly_trends(data):
 
     return yearly_trends.reset_index()
 
-def region_population_numpy(data, region, year):
+
+def region_population_numpy(
+    data: pd.DataFrame,
+    region: str,
+    year: int
+) -> tuple[int, int]:
     """
     Calculates the number of countries and total population
     in a selected continent and year using NumPy.
@@ -115,7 +127,11 @@ def region_population_numpy(data, region, year):
     return int(country_count), int(total_population)
 
 
-def build_population_matrix(data, countries, years):
+def build_population_matrix(
+    data: pd.DataFrame,
+    countries: list[str],
+    years: list[int]
+) -> np.ndarray:
     """
     Builds a population matrix where rows represent countries
     and columns represent years.
@@ -140,7 +156,10 @@ def build_population_matrix(data, countries, years):
     return matrix
 
 
-def index_by_broadcast(matrix, baseline_column):
+def index_by_broadcast(
+    matrix: np.ndarray,
+    baseline_column: int
+) -> tuple[np.ndarray, tuple[int, int], tuple[int, int]]:
     """
     Calculates population indexes using NumPy broadcasting.
     """
@@ -151,7 +170,10 @@ def index_by_broadcast(matrix, baseline_column):
     return index, baseline.shape, index.shape
 
 
-def index_by_loop(matrix, baseline_column):
+def index_by_loop(
+    matrix: np.ndarray,
+    baseline_column: int
+) -> np.ndarray:
     """
     Calculates population indexes using nested loops.
     """
@@ -166,7 +188,8 @@ def index_by_loop(matrix, baseline_column):
 
     return result
 
-def generate_country_summary(data):
+
+def generate_country_summary(data: pd.DataFrame) -> pd.DataFrame:
     """
     Generates summary statistics grouped by country.
 
@@ -184,3 +207,47 @@ def generate_country_summary(data):
     })
 
     return country_summary.reset_index()
+
+
+def generate_population_index(data: pd.DataFrame) -> pd.DataFrame:
+    """
+    Generates the population index for the Philippines,
+    Indonesia, and Thailand from 1982 to 2007.
+    """
+
+    countries = ["Philippines", "Indonesia", "Thailand"]
+    years = [1982, 1987, 1992, 1997, 2002, 2007]
+
+    population_matrix = build_population_matrix(
+        data,
+        countries,
+        years
+    )
+
+    if population_matrix.shape != (3, 6):
+        raise ValueError("Population matrix must have a 3 x 6 shape.")
+
+    population_index, baseline_shape, index_shape = index_by_broadcast(
+        population_matrix,
+        0
+    )
+
+    if baseline_shape != (3, 1) or index_shape != (3, 6):
+        raise ValueError("Unexpected broadcasting shapes.")
+
+    loop_index = index_by_loop(population_matrix, 0)
+
+    if not np.allclose(population_index, loop_index):
+        raise ValueError("Broadcasting and loop calculations do not match.")
+
+    if not np.allclose(population_index[:, 0], 100):
+        raise ValueError("The 1982 population index must equal 100.")
+
+    result = pd.DataFrame(
+        population_index,
+        columns=years
+    )
+
+    result.insert(0, "country", countries)
+
+    return result
