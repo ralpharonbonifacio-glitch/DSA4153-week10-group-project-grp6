@@ -13,7 +13,8 @@ from src.analysis import (
     build_population_matrix,
     index_by_broadcast,
     index_by_loop,
-    generate_country_summary
+    generate_country_summary,
+    generate_population_index
 )
 
 from src.analysis_exports import export_analysis_results
@@ -270,3 +271,27 @@ def test_asia_population_2007_expected_total():
 
     assert country_count == 33
     assert total_population == 3811953827
+
+# Test the complete population index generation
+def test_generate_population_index():
+    data = create_population_matrix_data()
+
+    result = generate_population_index(data)
+
+    assert result.shape == (3, 7)
+
+    assert result["country"].tolist() == [
+        "Philippines",
+        "Indonesia",
+        "Thailand"
+    ]
+
+    assert result[1982].tolist() == [
+        100.0,
+        100.0,
+        100.0
+    ]
+
+    assert round(result.loc[0, 2007], 2) == 182.00
+    assert round(result.loc[1, 2007], 2) == 150.00
+    assert round(result.loc[2, 2007], 2) == 139.58
