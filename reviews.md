@@ -6,22 +6,32 @@ This document records the peer code reviews conducted by the five group members.
 
 - **Reviewer:** Andrei Karl Dela Cruz (Member 1)
 - **Member Reviewed:** Matthew Zachary Medallon (Member 2)
+
 - **Files Reviewed:**
   - `src/readers_json_parquet.py`
   - `src/exports_json_parquet.py`
   - `tests/test_json_parquet.py`
+  
 - **Reviewed Commit:**
+- `159070b6000d3341e77bde0b7742f3b70feff3f7` – chore: created the three files needed
+- `26ffcce5e1283e10bc943bffd1ff80064b92acb0` – feat: add json and parquet reader functions
+- `4683b6f710bbca5d074ed197e6979e2c03600414` – feat: add json and parquet export functions
+- `c0acd7ee681669bc6964e5eb7adf164f9a7377fc` – test: add unit tests for json and parquet readers and exporters
+- `5fd4a7ef7c37bc86d6ef27e4da799cc6483182b8` – fix: reader, export, and test programs
 
 ### Specific Feedback
-[To be completed based on the actual review.]
+The implementation was reviewed and found to be well-organized and consistent with the assigned responsibilities. The JSON reader handles nested JSON structures and flattens the data into the required format, while the Parquet reader supports reading files and applying the appropriate column mappings and data types.
+
+The export functions also support saving processed data into JSON and Parquet formats. The test suite covers reading and exporting both formats, column mappings, data validation, and round-trip verification to ensure that exported files can be read back correctly.
+
+**No major issues or required changes were identified during the review.** The implementation is considered satisfactory for the assigned requirements.
 
 ### Author's Response
-[To be completed based on the author's response.]
+No changes requested.
 
 ### Changes Made
-[To be completed based on the actual changes, if any.]
+No additional changes required following the review.
 
----
 
 ## Review 2 – Member 2 Reviews Member 3
 
@@ -147,12 +157,11 @@ No changes requested.
 
 ### Changes Made
 No additional changes required following the review.
----
 
 ## Review 5 – Member 5 Reviews Member 1
 
-- **Reviewer:** Matthew Zachary Medallon (Member 2)
-- **Member Reviewed:** Josef Jayden Nepomuceno (Member 5)
+- **Reviewer:** Josef Jayden Nepomuceno (Member 5)
+- **Member Reviewed:** Andrei Karl Dela Cruz (Member 1)
 - **Files Reviewed:**
   - `src/readers_csv_excel.py`
   - `src/exports_csv_excel.py`
