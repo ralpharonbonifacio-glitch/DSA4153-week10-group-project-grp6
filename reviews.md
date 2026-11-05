@@ -106,10 +106,16 @@ The report's results are consistent with `manifest.json`: 1,704 records, 142 cou
 **Minor observations:** the notebook has unused imports and needs `output/canonical.csv` from the pipeline, which is not stated, and `lifeExp_rank` appears as a decimal.
 
 ### Author's Response
-[To be completed after the author responds.]
+Thank you for the feedback. I reviewed the comments and made the necessary changes to improve my analysis module, tests, and report. I also checked the results again to make sure they are still correct and consistent.
 
 ### Changes Made
-[To be completed after the author makes changes, if any.]
+1. Fixed the descriptive statistics export by preserving the row labels in the CSV file.
+2. Changed the term "global averages" to "unweighted averages across countries" for more accurate descriptions.
+3. Added error handling to the export function for invalid input.
+4. Added more test cases for missing country-year records, missing countries, and invalid export input.
+5. Improved the export test to check the actual contents of the CSV file.
+6. Removed unused imports, added a note about running the pipeline before the notebook, changed `lifeExp_rank` to integer values, and fixed a typo in the test comments.
+7. Ran the complete test suite, resulting in 104 passed tests.
 
 ---
 ## Review 4 – Member 4 Reviews Member 5
