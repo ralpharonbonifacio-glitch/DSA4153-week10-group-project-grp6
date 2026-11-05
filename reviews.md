@@ -114,8 +114,8 @@ The report's results are consistent with `manifest.json`: 1,704 records, 142 cou
 ---
 ## Review 4 – Member 4 Reviews Member 5
 
-**Reviewer:** Ralph Aron Mojica Bonifacio (Member 4)
-**Member Reviewed:** Josef Jayden Nepomuceno (Member 5)
+- **Reviewer:** Ralph Aron Mojica Bonifacio (Member 4)
+- **Member Reviewed:** Josef Jayden Nepomuceno (Member 5)
 ### Files Reviewed
 - src/configuration.py
 - src/pipeline.py
