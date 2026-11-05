@@ -7813,6 +7813,7 @@ a.anchor-link {
 <li>Compare broadcasting and loop-based population index calculations.</li>
 <li>Export the generated analysis results.</li>
 </ul>
+<p><strong>Note:</strong> Run <code>python main.py --config config.json</code> from the project root before executing this notebook. The notebook uses the generated <code>output/canonical.csv</code> file.</p>
 </div>
 </div>
 </div>
@@ -7821,7 +7822,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
@@ -7838,18 +7839,6 @@ a.anchor-link {
     <span class="n">PROJECT_ROOT</span> <span class="o">=</span> <span class="n">PROJECT_ROOT</span><span class="o">.</span><span class="n">parent</span>
 
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">PROJECT_ROOT</span><span class="p">))</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">src.readers_csv_excel</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">read_csv_file</span><span class="p">,</span>
-    <span class="n">read_excel_file</span>
-<span class="p">)</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">src.readers_json_parquet</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">read_json_file</span><span class="p">,</span>
-    <span class="n">read_parquet_file</span>
-<span class="p">)</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">src.reconciliation</span><span class="w"> </span><span class="kn">import</span> <span class="n">reconcile_data</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">src.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">generate_descriptive_statistics</span><span class="p">,</span>
@@ -8394,7 +8383,7 @@ Years Covered:
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h3 id="Interpretation">Interpretation<a class="anchor-link" href="#Interpretation">¶</a></h3><p>The results show a consistent increase in average life expectancy from approximately 49.06 years in 1952 to 67.01 years in 2007. This represents an overall improvement of nearly 18 years throughout the observation period.</p>
-<p>The line graph illustrates a steady upward trend, suggesting improvements in overall life expectancy across the countries included in the dataset. However, the values represent global averages across the available country records, so individual countries may have experienced different patterns of change.</p>
+<p>The line graph illustrates a steady upward trend, suggesting improvements in overall life expectancy across the countries included in the dataset. However, the values represent unweighted averages across the available country records, so individual countries may have experienced different patterns of change.</p>
 </div>
 </div>
 </div>
@@ -8565,7 +8554,7 @@ Years Covered:
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="5.-GDP-per-Capita-Analysis">5. GDP per Capita Analysis<a class="anchor-link" href="#5.-GDP-per-Capita-Analysis">¶</a></h2><p>This section examines the average GDP per capita across countries for each year. The analysis provides an overview of how the average economic output per person changed throughout the observation period.</p>
+<h2 id="5.-GDP-per-Capita-Analysis">5. GDP per Capita Analysis<a class="anchor-link" href="#5.-GDP-per-Capita-Analysis">¶</a></h2><p>This section examines the unweighted average GDP per capita across countries for each year. The analysis provides an overview of how the average economic output per person changed throughout the observation period.</p>
 </div>
 </div>
 </div>
@@ -10507,7 +10496,7 @@ All 1982 Index Values Equal 100: True
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [20]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Set the reporting year</span>
@@ -10529,7 +10518,7 @@ All 1982 Index Values Equal 100: True
     <span class="n">asia_selected_year</span><span class="p">[</span><span class="s2">"lifeExp"</span><span class="p">]</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span>
         <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">method</span><span class="o">=</span><span class="s2">"min"</span>
-    <span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 <span class="p">)</span>
 
 <span class="n">display</span><span class="p">(</span><span class="n">asia_selected_year</span><span class="p">)</span>
@@ -11200,7 +11189,7 @@ All 1982 Index Values Equal 100: True
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [22]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Create output directory if it does not exist</span>
@@ -11209,7 +11198,7 @@ All 1982 Index Values Equal 100: True
 
 <span class="c1"># Export analysis results</span>
 <span class="n">export_analysis_results</span><span class="p">(</span>
-    <span class="n">descriptive_statistics</span><span class="p">,</span>
+    <span class="n">descriptive_statistics</span><span class="o">.</span><span class="n">rename_axis</span><span class="p">(</span><span class="s2">"statistic"</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(),</span>
     <span class="n">output_directory</span> <span class="o">/</span> <span class="s2">"descriptive_statistics.csv"</span>
 <span class="p">)</span>
 
