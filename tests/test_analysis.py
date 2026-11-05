@@ -1,6 +1,7 @@
 
 import numpy as np
 import pandas as pd
+import pytest
 
 from src.analysis import (
     generate_descriptive_statistics,
@@ -58,7 +59,7 @@ def create_population_matrix_data():
     return pd.DataFrame(records)
 
 
-# ASample data for the expected Asian population total
+# Sample data for the expected Asian population total
 def create_asia_2007_data():
     populations = [100000000] * 32 + [611953827]
 
@@ -136,6 +137,18 @@ def test_export_analysis_results(tmp_path):
 
     assert result is True
     assert len(exported_data) == 4
+    assert list(exported_data.columns) == list(data.columns)
+    pd.testing.assert_frame_equal(exported_data, data)
+
+
+def test_export_analysis_results_invalid_input(tmp_path):
+    output_path = tmp_path / "invalid.csv"
+
+    with pytest.raises(TypeError):
+        export_analysis_results(
+            ["invalid", "data"],
+            output_path
+        )
 
 
 def test_region_population_numpy():
@@ -158,6 +171,24 @@ def test_build_population_matrix():
     assert result.shape == (2, 2)
     assert result[0, 0] == 80000000
     assert result[0, 1] == 91000000
+
+
+def test_build_population_matrix_missing_country_year():
+    data = create_population_matrix_data()
+
+    data = data.drop(
+        data[
+            (data["country"] == "Philippines") &
+            (data["year"] == 1987)
+        ].index
+    )
+
+    with pytest.raises(ValueError):
+        build_population_matrix(
+            data,
+            ["Philippines", "Indonesia", "Thailand"],
+            [1982, 1987, 1992, 1997, 2002, 2007]
+        )
 
 
 def test_index_by_broadcast():
@@ -272,6 +303,7 @@ def test_asia_population_2007_expected_total():
     assert country_count == 33
     assert total_population == 3811953827
 
+
 # Test the complete population index generation
 def test_generate_population_index():
     data = create_population_matrix_data()
@@ -295,3 +327,12 @@ def test_generate_population_index():
     assert round(result.loc[0, 2007], 2) == 182.00
     assert round(result.loc[1, 2007], 2) == 150.00
     assert round(result.loc[2, 2007], 2) == 139.58
+
+
+def test_generate_population_index_missing_country():
+    data = create_population_matrix_data()
+
+    data = data[data["country"] != "Thailand"]
+
+    with pytest.raises(ValueError):
+        generate_population_index(data)
