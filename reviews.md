@@ -69,29 +69,6 @@ No additional changes required following the review.
 
 - **Reviewer:** Eivrard Seraphim Franco (Member 3)
 - **Member Reviewed:** Ralph Aron Mojica Bonifacio (Member 4)
-- **Files Reviewed:**
-  - `src/analysis.py`
-  - `src/analysis_exports.py`
-  - `tests/test_analysis.py`
-  - `report.ipynb`
-  - `report.html`
-- **Reviewed Commit:**
-
-### Specific Feedback
-[To be completed based on the actual review.]
-
-### Author's Response
-[To be completed based on the author's response.]
-
-### Changes Made
-[To be completed based on the actual changes, if any.]
-
----
-
-## Review 3 – Member 3 Reviews Member 4
-
-- **Reviewer:** Eivrard Seraphim Franco (Member 3)
-- **Member Reviewed:** Ralph Aron Mojica Bonifacio (Member 4)
 
 ### Files Reviewed
 - `src/analysis.py`
@@ -101,10 +78,18 @@ No additional changes required following the review.
 - `output/report.html`
 
 ### Reviewed Commits
-- `d2d70101ef4d48cfff9dfee4fe3831c7e6659bfd` – Analysis module (population index)
+- `8670a0294735545da75a1bc19f54256ff389cb5b` – Descriptive statistics function
+- `e9823c4e646f70457fb8fefe38f5c9d61fc7040d` – Country metric analysis
+- `bfe34a7bea9d4f260bcfbcc5e5226b53af4b3cef` – Continent and yearly analysis
 - `13063718481b1cb3899d78a4a9cde3099ef95495` – Analysis results export
-- `3c208a349d510bb9042f458a904318dd664f9406` – Analysis tests
-- `db5c6a07f6352ae3044d8775856148d6688ca53b` – Analysis notebook and HTML report
+- `5d1534d197995324e7d73efcba5a54aca2d0c0b4` – Analysis module tests
+- `3e782a2c7adc842b16cb39a0d786bc42af47c5db` – NumPy analysis and reporting notebook
+- `398b25259dd3a10c95799a5735ec4ee8c5bc12f8` – Country-level analysis summary
+- `9bf57c51402bd6c84da088c441ecd6bc8b2c4f5f` – Data analysis report notebook
+- `d2d70101ef4d48cfff9dfee4fe3831c7e6659bfd` – Population index analysis and tests
+- `af7fd02fd01e1fb8de2fd37b9b73f8c06c98fe3e` – Analysis notebook and HTML report update
+- `3c208a349d510bb9042f458a904318dd664f9406` – Population index generation test
+- `db5c6a07f6352ae3044d8775856148d6688ca53b` – Final notebook and HTML report update
 
 ### Specific Feedback
 
@@ -126,6 +111,36 @@ The report's results are consistent with `manifest.json`: 1,704 records, 142 cou
 ### Changes Made
 [To be completed after the author makes changes, if any.]
 
+---
+## Review 4 – Member 4 Reviews Member 5
+
+**Reviewer:** Ralph Aron Mojica Bonifacio (Member 4)
+**Member Reviewed:** Josef Jayden Nepomuceno (Member 5)
+### Files Reviewed
+- src/configuration.py
+- src/pipeline.py
+- main.py
+- tests/test_pipeline.py
+
+### Reviewed Commits
+- a5bc2a03db364c7212e8551fc011131fb05e833d – Configuration
+- e4c13776eee75099f69859dc2f49049ca7fd5fca – Pipeline
+- c0849ebf93d425f0da14d2e907d0ce5c56834d32 – Main entry point
+- dff81700afc1d0d35b55f098546ba942bc40e755 – Pipeline tests
+
+### Specific Feedback
+
+The implementation was reviewed and found to be well-organized and consistent with the assigned responsibilities. The configuration module validates the required settings, the main entry point handles command-line arguments and errors, and the pipeline integrates the different processing modules.
+
+The test suite also covers normal pipeline execution, invalid inputs, data validation, reconciliation, export verification, failure handling, and configuration settings.
+
+**No major issues or required changes were identified during the review.** The implementation is considered satisfactory for the assigned requirements.
+
+### Author's Response
+No changes requested.
+
+### Changes Made
+No additional changes required following the review.
 ---
 
 ## Review 5 – Member 5 Reviews Member 1
