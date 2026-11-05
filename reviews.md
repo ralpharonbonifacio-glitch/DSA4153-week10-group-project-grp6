@@ -2,51 +2,9 @@
 
 This document records the peer code reviews conducted by the five group members. Each member is assigned to review another member's implementation. The reviewed commit, specific feedback, author response, and resulting changes are documented below.
 
-## Review 1 – Member 1 Reviews Member 3
+## Review 1 – Member 1 Reviews Member 2
 
 - **Reviewer:** Andrei Karl Dela Cruz (Member 1)
-- **Member Reviewed:** Eivrard Seraphim Franco (Member 3)
-- **Files Reviewed:**
-  - `src/validation.py`
-  - `src/reconciliation.py`
-  - `tests/test_validation.py`
-- **Reviewed Commit:**
-
-### Specific Feedback
-[To be completed based on the actual review.]
-
-### Author's Response
-[To be completed based on the author's response.]
-
-### Changes Made
-[To be completed based on the actual changes, if any.]
-
----
-
-## Review 2 – Member 2 Reviews Member 1
-
-- **Reviewer:** Matthew Zachary Medallon (Member 2)
-- **Member Reviewed:** Andrei Karl Dela Cruz (Member 1)
-- **Files Reviewed:**
-  - `src/readers_csv_excel.py`
-  - `src/exports_csv_excel.py`
-  - `tests/test_csv_excel.py`
-- **Reviewed Commit:**
-
-### Specific Feedback
-[To be completed based on the actual review.]
-
-### Author's Response
-[To be completed based on the author's response.]
-
-### Changes Made
-[To be completed based on the actual changes, if any.]
-
----
-
-## Review 3 – Member 3 Reviews Member 2
-
-- **Reviewer:** Eivrard Seraphim Franco (Member 3)
 - **Member Reviewed:** Matthew Zachary Medallon (Member 2)
 - **Files Reviewed:**
   - `src/readers_json_parquet.py`
@@ -65,10 +23,54 @@ This document records the peer code reviews conducted by the five group members.
 
 ---
 
+## Review 2 – Member 2 Reviews Member 3
+
+- **Reviewer:** Matthew Zachary Medallon (Member 2)
+- **Member Reviewed:** Eivrard Seraphim Franco (Member 3)
+- **Files Reviewed:**
+  - `src/validation.py`
+  - `src/reconciliation.py`
+  - `tests/test_validation.py`
+- **Reviewed Commit:**
+
+### Specific Feedback
+[To be completed based on the actual review.]
+
+### Author's Response
+[To be completed based on the author's response.]
+
+### Changes Made
+[To be completed based on the actual changes, if any.]
+
+---
+
+## Review 3 – Member 3 Reviews Member 4
+
+- **Reviewer:** Eivrard Seraphim Franco (Member 3)
+- **Member Reviewed:** Ralph Aron Mojica Bonifacio (Member 4)
+- **Files Reviewed:**
+  - `src/analysis.py`
+  - `src/analysis_exports.py`
+  - `tests/test_analysis.py`
+  - `report.ipynb`
+  - `report.html`
+- **Reviewed Commit:**
+
+### Specific Feedback
+[To be completed based on the actual review.]
+
+### Author's Response
+[To be completed based on the author's response.]
+
+### Changes Made
+[To be completed based on the actual changes, if any.]
+
+---
+
 ## Review 4 – Member 4 Reviews Member 5
 
 - **Reviewer:** Ralph Aron Mojica Bonifacio (Member 4)
-- **Member Reviewed:** Josef Jaden Nepomuceno (Member 5)
+- **Member Reviewed:** Josef Jayden Nepomuceno (Member 5)
 
 ### Files Reviewed
 - `src/configuration.py`
@@ -98,16 +100,14 @@ No additional changes required following the review.
 
 ---
 
-## Review 5 – Member 5 Reviews Member 4
+## Review 5 – Member 5 Reviews Member 1
 
-- **Reviewer:** Josef Jayden Nepomuceno (Member 5)
-- **Member Reviewed:** Ralph Aron Mojica Bonifacio (Member 4)
+- **Reviewer:** Matthew Zachary Medallon (Member 2)
+- **Member Reviewed:** Josef Jayden Nepomuceno (Member 5)
 - **Files Reviewed:**
-  - `src/analysis.py`
-  - `src/analysis_exports.py`
-  - `tests/test_analysis.py`
-  - `report.ipynb`
-  - `report.html`
+  - `src/readers_csv_excel.py`
+  - `src/exports_csv_excel.py`
+  - `tests/test_csv_excel.py`
 - **Reviewed Commit:**
 
 ### Specific Feedback
