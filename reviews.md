@@ -88,36 +88,43 @@ No additional changes required following the review.
 
 ---
 
-## Review 4 – Member 4 Reviews Member 5
+## Review 3 – Member 3 Reviews Member 4
 
-- **Reviewer:** Ralph Aron Mojica Bonifacio (Member 4)
-- **Member Reviewed:** Josef Jayden Nepomuceno (Member 5)
+- **Reviewer:** Eivrard Seraphim Franco (Member 3)
+- **Member Reviewed:** Ralph Aron Mojica Bonifacio (Member 4)
 
 ### Files Reviewed
-- `src/configuration.py`
-- `src/pipeline.py`
-- `main.py`
-- `tests/test_pipeline.py`
+- `src/analysis.py`
+- `src/analysis_exports.py`
+- `tests/test_analysis.py`
+- `report.ipynb`
+- `output/report.html`
 
 ### Reviewed Commits
-- `a5bc2a03db364c7212e8551fc011131fb05e833d` – Configuration
-- `e4c13776eee75099f69859dc2f49049ca7fd5fca` – Pipeline
-- `c0849ebf93d425f0da14d2e907d0ce5c56834d32` – Main entry point
-- `dff81700afc1d0d35b55f098546ba942bc40e755` – Pipeline tests
+- `d2d70101ef4d48cfff9dfee4fe3831c7e6659bfd` – Analysis module (population index)
+- `13063718481b1cb3899d78a4a9cde3099ef95495` – Analysis results export
+- `3c208a349d510bb9042f458a904318dd664f9406` – Analysis tests
+- `db5c6a07f6352ae3044d8775856148d6688ca53b` – Analysis notebook and HTML report
 
 ### Specific Feedback
 
-The implementation was reviewed and found to be well-organized and consistent with the assigned responsibilities. The configuration module validates the required settings, the main entry point handles command-line arguments and errors, and the pipeline integrates the different processing modules.
+The analysis module is well organized and follows the function specification. All six required functions are present, with clear names, docstrings and type hints. The NumPy functions (`region_population_numpy`, `build_population_matrix`, `index_by_broadcast`, `index_by_loop`) are correct. Running `tests/test_analysis.py` gave 17 passed.
 
-The test suite also covers normal pipeline execution, invalid inputs, data validation, reconciliation, export verification, failure handling, and configuration settings.
+The report's results are consistent with `manifest.json`: 1,704 records, 142 countries, 33 Asian countries in 2007 with a population of 3,811,953,827, and a Philippines 2007 population of 91,077,287. The broadcasting and loop calculations match, and the written interpretations agree with the tables shown. `report.html` was opened and checked. It contains the full notebook content, all 6 charts and the conclusion, with no execution errors, and it is self-contained because the images are embedded.
 
-**No major issues or required changes were identified during the review.** The implementation is considered satisfactory for the assigned requirements.
+**Issues found (none blocking, one should be addressed):**
+
+1. **`descriptive_statistics.csv` loses its row labels.** `export_analysis_results` always writes with `index=False`. For `describe()` output, the labels (count, mean, std, min, 25%, 50%, 75%, max) are the index, so the exported file contains only numbers and cannot be read.
+2. **"Average" is unweighted but described as "global".** Average life expectancy and average GDP per capita are simple means across countries, so a small country counts as much as China. The report calls them "global averages".
+3. **Error handling is not tested.** `export_analysis_results` raises an unclear `AttributeError` for a non-DataFrame, and no test covers the error paths, such as the `ValueError` in `build_population_matrix` when a country-year record is missing. No test checks the exported file's contents beyond the row count, which is how issue 1 went unnoticed.
+
+**Minor observations:** the notebook has unused imports and needs `output/canonical.csv` from the pipeline, which is not stated, and `lifeExp_rank` appears as a decimal.
 
 ### Author's Response
-No changes requested.
+[To be completed after the author responds.]
 
 ### Changes Made
-No additional changes required following the review.
+[To be completed after the author makes changes, if any.]
 
 ---
 
