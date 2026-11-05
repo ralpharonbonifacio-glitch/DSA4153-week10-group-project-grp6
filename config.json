@@ -1,14 +1,71 @@
 {
-    "input_directory": "data",
-    "output_directory": "output",
-    "primary_key": [
-        "country",
-        "year"
-    ],
-    "supported_formats": [
-        "csv",
-        "xlsx",
-        "json",
-        "parquet"
-    ]
+  "input_directory": "data",
+  "output_directory": "output",
+  "reporting_year": 2007,
+  "primary_key": ["country", "year"],
+  "supported_formats": ["csv", "xlsx", "json", "parquet"],
+  "analysis": {"region": "Asia", 
+  "history_country": "Philippines",
+  "matrix_countries": ["Philippines", "Indonesia", "Thailand"],
+  "matrix_years": [1982, 1987, 1992, 1997, 2002, 2007],
+  "baseline_year": 1982},
+  "inputs": [
+    {
+      "file": "country_records.csv",
+      "format": "csv",
+      "encoding": "cp1252",
+      "separator": ";",
+      "comment_prefix": "#",
+      "ignore_columns": ["export_note"],
+      "mapping": {
+        "CountryName": "country",
+        "ContinentName": "continent",
+        "ObservationYear": "year",
+        "LifeYears": "lifeExp",
+        "PopulationPersons": "pop",
+        "GDPPerPerson": "gdpPercap"
+      }
+    },
+    {
+      "file": "country_records.xlsx",
+      "format": "xlsx",
+      "sheet_name": "observations",
+      "engine": "openpyxl",
+      "mapping": {
+        "country_name": "country",
+        "continent_name": "continent",
+        "observation_year": "year",
+        "life_expectancy": "lifeExp",
+        "population": "pop",
+        "gdp_per_capita": "gdpPercap"
+      }
+    },
+    {
+      "file": "country_records.json",
+      "format": "json",
+      "encoding": "utf-8",
+      "record_path": "records",
+      "mapping": {
+        "identity.country": "country",
+        "identity.continent": "continent",
+        "identity.year": "year",
+        "measures.lifeExp": "lifeExp",
+        "measures.pop": "pop",
+        "measures.gdpPercap": "gdpPercap"
+      }
+    },
+    {
+      "file": "country_records.parquet",
+      "format": "parquet",
+      "engine": "pyarrow",
+      "mapping": {
+        "COUNTRY": "country",
+        "CONTINENT": "continent",
+        "YEAR": "year",
+        "LIFE_EXP": "lifeExp",
+        "POPULATION": "pop",
+        "GDP_PER_CAPITA": "gdpPercap"
+      }
+    }
+  ]
 }
