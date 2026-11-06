@@ -24,8 +24,27 @@ DSA4153-week10-group-project-grp6/
 │
 ├── output/
 │   ├── .gitkeep
+│   ├── asia_selected_year.csv
+│   ├── audit_log.csv
+│   ├── canonical.csv
+│   ├── canonical.json
+│   ├── canonical.parquet
+│   ├── canonical.xlsx
+│   ├── cleaned_data.csv
+│   ├── continent_summary.csv
+│   ├── country_history.csv
+│   ├── country_summary.csv
+│   ├── descriptive_statistics.csv
+│   ├── duplicate_log.csv
+│   ├── gdp_analysis.csv
+│   ├── life_expectancy_analysis.csv
+│   ├── population_analysis.csv
+│   ├── population_index.csv
+│   ├── quarantine.csv
 │   ├── report.html
-│   └── report.ipynb
+│   ├── report.ipynb
+│   ├── validation.csv
+│   └── yearly_trends.csv
 │
 ├── src/
 │   ├── __init__.py
@@ -59,6 +78,8 @@ DSA4153-week10-group-project-grp6/
 ├── requirements.txt
 └── reviews.md
 ```
+
+The final submission ZIP also includes `submission_manifest.txt` in the project root. This file records the repository URL, release tag, full commit hash, and SHA-256 hashes of the supplied input files.
 
 ## Dataset Information
 
@@ -187,11 +208,13 @@ python -m venv venv
 Activate the virtual environment:
 
 **Windows:**
+
 ```bash
 venv\Scripts\activate
 ```
 
 **macOS/Linux:**
+
 ```bash
 source venv/bin/activate
 ```
@@ -224,14 +247,19 @@ The test files are located in the `tests/` directory and cover the individual co
 
 ## Reports and Outputs
 
-The `output/` directory contains the generated analytical reports:
+The `output/` directory contains the generated pipeline outputs and analytical reports.
 
-- `report.ipynb` – Jupyter Notebook containing the analysis and report.
-- `report.html` – HTML version of the analytical report.
+These include:
 
-Other generated pipeline outputs include standardized datasets, rejected records, duplicate records, validation results, and audit information.
+- **Standardized datasets:** `canonical.csv`, `canonical.json`, `canonical.parquet`, and `canonical.xlsx`.
+- **Cleaned data:** `cleaned_data.csv`.
+- **Data quality records:** `quarantine.csv`, `duplicate_log.csv`, and `validation.csv`.
+- **Audit information:** `audit_log.csv`.
+- **Analytical outputs:** `asia_selected_year.csv`, `continent_summary.csv`, `country_history.csv`, `country_summary.csv`, `descriptive_statistics.csv`, `gdp_analysis.csv`, `life_expectancy_analysis.csv`, `population_analysis.csv`, `population_index.csv`, and `yearly_trends.csv`.
+- **Jupyter Notebook:** `report.ipynb`, containing the analysis and report.
+- **HTML Report:** `report.html`, the HTML export of the analytical report.
 
-These generated outputs should be included in the final submission ZIP file as required by the project instructions.
+All required generated outputs, including the notebook and HTML report, are included in the final submission package.
 
 ## Group Members and Responsibilities
 
@@ -250,6 +278,17 @@ The project includes the following files for documenting individual contribution
 - `contributions.csv` – Records individual contributions and supporting implementation details.
 - `contributions.md` – Provides a summary of group member contributions.
 - `reviews.md` – Documents code review activities and feedback.
+
+## Release and Submission Information
+
+**GitHub Repository:**  
+https://github.com/ralpharonbonifacio-glitch/DSA4153-week10-group-project-grp6
+
+**Release Tag:** `week10-v1.0`
+
+The final submission ZIP includes the project source code, configuration files, supplied input data, generated outputs, automated tests, reports, contribution and review records, and `submission_manifest.txt`.
+
+The submission manifest contains the release commit hash and SHA-256 hashes of the supplied input files to support verification of the submitted materials.
 
 ## Notes
 
