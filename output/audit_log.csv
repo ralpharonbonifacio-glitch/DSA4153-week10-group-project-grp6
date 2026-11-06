@@ -1,0 +1,24 @@
+step,source_file,operation,rule,rows_before,rows_after
+read,country_records.csv,parse csv and rename columns,documented layout and mapping,1712,1712
+validate,country_records.csv,quarantine invalid records,manifest rules,1712,1706
+deduplicate,country_records.csv,remove exact duplicates,all six fields equal,1706,1704
+conflict check,country_records.csv,"same key, different values",stop on conflict,1704,1704
+read,country_records.xlsx,parse xlsx and rename columns,documented layout and mapping,1712,1712
+validate,country_records.xlsx,quarantine invalid records,manifest rules,1712,1706
+deduplicate,country_records.xlsx,remove exact duplicates,all six fields equal,1706,1704
+conflict check,country_records.xlsx,"same key, different values",stop on conflict,1704,1704
+read,country_records.json,parse json and rename columns,documented layout and mapping,1712,1712
+validate,country_records.json,quarantine invalid records,manifest rules,1712,1706
+deduplicate,country_records.json,remove exact duplicates,all six fields equal,1706,1704
+conflict check,country_records.json,"same key, different values",stop on conflict,1704,1704
+read,country_records.parquet,parse parquet and rename columns,documented layout and mapping,1712,1712
+validate,country_records.parquet,quarantine invalid records,manifest rules,1712,1706
+deduplicate,country_records.parquet,remove exact duplicates,all six fields equal,1706,1704
+conflict check,country_records.parquet,"same key, different values",stop on conflict,1704,1704
+reconcile,all inputs,compare tables by key,"atol 1e-8, rtol 0",4,1
+analyse,canonical,pandas and NumPy tables,reporting year 2007,1704,3
+export,canonical,"write csv, xlsx, json, parquet","six canonical fields, no index",1704,1704
+reload,canonical.csv,reapply declared schema,"converted: country, continent",1704,1704
+reload,canonical.xlsx,reapply declared schema,"converted: country, continent",1704,1704
+reload,canonical.json,reapply declared schema,"converted: country, continent",1704,1704
+reload,canonical.parquet,reapply declared schema,"converted: country, continent",1704,1704

@@ -1,12 +1,10 @@
-# DSA4153-week10-group-project-grp6
-
-**Group 6 – DSA4153 Week 10 Group Programming Challenge**
+# DSA4153 Week 10 Group Programming Challenge
 
 ## Project Overview
 
-This project focuses on processing and analyzing a Gapminder historical teaching dataset using Python. It supports multiple input formats, data validation, duplicate detection, data reconciliation, and data analysis.
+This project implements a data processing and analysis pipeline for the Gapminder historical dataset. It supports multiple input formats, validates and reconciles records, removes invalid and duplicate entries, and generates standardized datasets and analytical reports.
 
-The dataset contains historical country-level observations from 1952 to 2007. It includes deliberately introduced invalid records and duplicate entries for testing data-processing capabilities.
+The system is designed to handle CSV, Excel, JSON, and Parquet files while applying consistent validation rules and producing reliable outputs for further analysis.
 
 ## Project Structure
 
@@ -14,234 +12,248 @@ The dataset contains historical country-level observations from 1952 to 2007. It
 DSA4153-week10-group-project-grp6/
 │
 ├── data/
-│   └── manifest.json
+│   ├── README.txt
+│   ├── conflicting_key.csv
+│   ├── country_records.csv
+│   ├── country_records.json
+│   ├── country_records.parquet
+│   ├── country_records.xlsx
+│   ├── manifest.json
+│   ├── missing_column.csv
+│   └── unsupported.txt
 │
 ├── output/
+│   ├── .gitkeep
+│   ├── report.html
+│   └── report.ipynb
 │
 ├── src/
-│   ├── readers_csv_excel.py
-│   ├── exports_csv_excel.py
-│   ├── readers_json_parquet.py
-│   ├── exports_json_parquet.py
-│   ├── validation.py
-│   ├── reconciliation.py
+│   ├── __init__.py
 │   ├── analysis.py
 │   ├── analysis_exports.py
 │   ├── configuration.py
-│   └── pipeline.py
+│   ├── exports_csv_excel.py
+│   ├── exports_json_parquet.py
+│   ├── pipeline.py
+│   ├── readers_csv_excel.py
+│   ├── readers_json_parquet.py
+│   ├── reconciliation.py
+│   └── validation.py
 │
 ├── tests/
+│   ├── __init__.py
+│   ├── test_analysis.py
 │   ├── test_csv_excel.py
 │   ├── test_json_parquet.py
-│   ├── test_validation.py
-│   ├── test_analysis.py
-│   └── test_pipeline.py
+│   ├── test_pipeline.py
+│   ├── test_results.txt
+│   └── test_validation.py
 │
-├── FUNCTION_SPECIFICATIONS.md
-├── PROJECT_GUIDELINES.md
+├── .gitignore
 ├── README.md
 ├── config.json
+├── contributions.csv
+├── contributions.md
 ├── main.py
 ├── pytest.ini
-└── requirements.txt
+├── requirements.txt
+└── reviews.md
 ```
 
-**Additional files assigned for reporting:**
-- `report.ipynb` – Jupyter Notebook containing the data analysis and visualizations.
-- `report.html` – Exported HTML version of the analysis report.
+## Dataset Information
 
-*Note: The structure above represents the planned project organization. Some source, test, and report files may still be under development.*
+The project uses a historical snapshot of the Gapminder dataset containing country-level observations from 1952 to 2007.
 
-## Project Documentation
+**Original Dataset Source:** [Gapminder Dataset](https://raw.githubusercontent.com/jennybc/gapminder/main/inst/extdata/gapminder.tsv)
 
-The repository includes documentation and configuration files that guide the development and execution of the project.
+**Dataset Documentation:** [Gapminder Reference](https://jennybc.github.io/gapminder/reference/gapminder.html)
 
-- **`PROJECT_GUIDELINES.md`** – Contains the overall project instructions, requirements, and implementation guidelines that all group members must follow.
-- **`FUNCTION_SPECIFICATIONS.md`** – Defines the required functions, expected parameters, return values, and behavior of the assigned modules.
-- **`config.json`** – Contains the project configuration used by the processing pipeline.
-- **`data/manifest.json`** – Defines the input dataset schema, column mappings, data types, validation rules, and expected control totals.
-- **`pytest.ini`** – Contains the pytest configuration for running automated tests.
-- **`requirements.txt`** – Lists the Python dependencies required by the project.
+### Dataset Scope
 
-## Requirements
+- Countries: 142
+- Observation period: 1952–2007
+- Observation interval: Five years
+- Original observations: 1,704
+- Canonical records after processing: 1,704
+
+The supplied input files contain deliberately introduced invalid records and duplicate records for testing the pipeline. These additions are for instructional purposes and are not part of the original Gapminder dataset.
+
+### Canonical Dataset Schema
+
+| Column | Data Type | Description |
+|---|---|---|
+| country | string | Country name |
+| continent | string | Continent where the country belongs |
+| year | int64 | Observation year |
+| lifeExp | float64 | Life expectancy in years |
+| pop | int64 | Population in persons |
+| gdpPercap | float64 | GDP per capita in inflation-adjusted US dollars |
+
+The canonical record key is composed of `country` and `year`.
+
+### Input File Formats
+
+The pipeline supports four input formats:
+
+- **CSV:** Handles configured encodings, delimiters, comments, column aliases, and additional columns.
+- **Excel:** Reads observations from the configured worksheet and maps source columns to the canonical schema.
+- **JSON:** Reads records from the configured record path and handles nested fields.
+- **Parquet:** Reads Parquet files and validates source values before converting them to their required data types.
+
+The input configuration and format-specific settings are defined in `data/manifest.json`.
+
+### Expected Input Record Counts
+
+Each of the four main input files contains:
+
+| Record Category | Expected Count |
+|---|---:|
+| Raw records | 1,712 |
+| Invalid records rejected | 6 |
+| Valid records before deduplication | 1,706 |
+| Exact duplicates removed | 2 |
+| Canonical records | 1,704 |
+
+The pipeline also includes separate failure-test files:
+
+- `conflicting_key.csv` contains a contradictory record for an existing country-year key and must cause processing to fail.
+- `missing_column.csv` is missing the required `pop` column and must cause processing to fail.
+- `unsupported.txt` is an unsupported input format and must be rejected.
+
+## Main Features
+
+### 1. Multiple File Format Support
+
+Reads and processes CSV, Excel, JSON, and Parquet datasets using their respective readers.
+
+### 2. Data Validation
+
+Checks records against the configured schema and validation rules, including required columns, valid country and continent values, allowed years, numeric values, and permitted value ranges.
+
+### 3. Data Reconciliation
+
+Identifies and rejects invalid records, removes exact duplicate records, and detects conflicting country-year keys.
+
+### 4. Standardized Data Export
+
+Exports processed records into standardized CSV, Excel, JSON, and Parquet formats.
+
+### 5. Data Analysis
+
+Generates descriptive statistics and country-level analytical summaries using the processed dataset.
+
+### 6. Reporting and Visualization
+
+Produces analytical reports and visualizations using Matplotlib. The project includes an HTML report and Jupyter Notebook for presenting the results.
+
+### 7. Automated Testing
+
+Uses pytest to test the readers, validation rules, reconciliation process, analysis functions, and overall pipeline.
+
+## Installation and Setup
+
+### Requirements
 
 - Python 3.14.1
-- pandas
-- NumPy
-- openpyxl
-- PyArrow
-- pytest
-- Jupyter
-- nbconvert
+- pandas 3.0.5
+- NumPy 2.5.3
+- openpyxl 3.1.5
+- PyArrow 26.0.0
+- pytest 9.2.0
+- Jupyter 1.1.1
+- nbconvert 7.17.1
+- Matplotlib 3.11.2
 
-## Installation
+All required Python packages and their exact versions are specified in `requirements.txt`.
 
-1. Clone the repository:
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/ralpharonbonifacio-glitch/DSA4153-week10-group-project-grp6.git
 ```
 
-2. Navigate to the project directory:
+### 2. Navigate to the Project Directory
 
 ```bash
 cd DSA4153-week10-group-project-grp6
 ```
 
-3. Install the required packages:
+### 3. Create a Virtual Environment
 
 ```bash
-python -m pip install -r requirements.txt
+python -m venv venv
 ```
 
-## Input Data
+Activate the virtual environment:
 
-The project supports the following input formats:
+**Windows:**
+```bash
+venv\Scripts\activate
+```
 
-- CSV
-- Excel (.xlsx)
-- JSON
-- Parquet
+**macOS/Linux:**
+```bash
+source venv/bin/activate
+```
 
-Refer to `data/manifest.json` for the dataset schema, column mappings, data types, validation rules, and expected control totals.
+### 4. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+## Running the Project
+
+Run the main program from the project root directory:
+
+```bash
+python main.py
+```
+
+The program uses the configuration and input files provided in the project to execute the data processing pipeline.
+
+## Running the Tests
+
+To execute the complete test suite, run:
+
+```bash
+pytest -v
+```
+
+The test files are located in the `tests/` directory and cover the individual components and overall pipeline.
+
+## Reports and Outputs
+
+The `output/` directory contains the generated analytical reports:
+
+- `report.ipynb` – Jupyter Notebook containing the analysis and report.
+- `report.html` – HTML version of the analytical report.
+
+Other generated pipeline outputs include standardized datasets, rejected records, duplicate records, validation results, and audit information.
+
+These generated outputs should be included in the final submission ZIP file as required by the project instructions.
 
 ## Group Members and Responsibilities
 
-The project is divided into five main responsibilities:
+| Group Member | Main Responsibility |
+|---|---|
+| Andrei Karl Dela Cruz | CSV and Excel readers and related processing |
+| Matthew Zachary Medallon | JSON and Parquet readers and related processing |
+| Eivrard Seraphim Franco | Data validation and reconciliation |
+| Ralph Aron Bonifacio | Data analysis and reporting |
+| Josef Jayden Nepomuceno | Pipeline development and integration |
 
-### Member 1 – CSV and Excel Processing
+## Contribution and Review Records
 
-**Andrei Karl Dela Cruz**
+The project includes the following files for documenting individual contributions and code reviews:
 
-Main responsibility: Handle CSV and Excel files.
-
-Files:
-- `src/readers_csv_excel.py`
-- `src/exports_csv_excel.py`
-- `tests/test_csv_excel.py`
-
-Tasks:
-- Read and parse CSV files.
-- Read Excel files using openpyxl or pandas.
-- Handle different column names and layouts specified in `manifest.json`.
-- Apply the correct encoding, delimiters, and sheet names.
-- Export cleaned data into CSV and Excel formats.
-- Create tests for reading and exporting both formats.
-- Test whether exported files can be read back correctly.
-
-### Member 2 – JSON and Parquet Processing
-
-**Matthew Zachary Medallon**
-
-Main responsibility: Handle JSON and Parquet files.
-
-Files:
-- `src/readers_json_parquet.py`
-- `src/exports_json_parquet.py`
-- `tests/test_json_parquet.py`
-
-Tasks:
-- Read and parse JSON files.
-- Flatten nested JSON structures.
-- Read Parquet files using PyArrow.
-- Handle different column names and data types.
-- Validate values before converting them into their proper types.
-- Export cleaned data into JSON and Parquet formats.
-- Create tests for reading and exporting both formats.
-- Test whether exported files can be read back correctly.
-
-### Member 3 – Data Validation and Reconciliation
-
-**Eivrard Seraphim Franco**
-
-Main responsibility: Ensure that the data is valid, consistent, and free from duplicates.
-
-Files:
-- `src/validation.py`
-- `src/reconciliation.py`
-- `tests/test_validation.py`
-
-Tasks:
-- Validate all six canonical columns.
-- Check missing, invalid, and unsupported values.
-- Apply the validation rules in `manifest.json`.
-- Identify and quarantine invalid records.
-- Detect exact duplicate records.
-- Detect conflicting `(country, year)` keys.
-- Reconcile records from different file formats.
-- Generate validation and audit reports.
-- Create tests for valid records, invalid records, duplicates, and conflicting keys.
-
-### Member 4 – Data Analysis and Reporting
-
-**Ralph Aron Bonifacio**
-
-Main responsibility: Analyze the cleaned dataset and present the results.
-
-Files:
-- `src/analysis.py`
-- `src/analysis_exports.py`
-- `tests/test_analysis.py`
-- `report.ipynb`
-- `report.html`
-
-Tasks:
-- Use pandas and NumPy for data analysis.
-- Generate descriptive statistics.
-- Analyze life expectancy, population, and GDP per capita.
-- Create country-level and continent-level summaries.
-- Analyze changes across the available years.
-- Create appropriate visualizations.
-- Export analytical results.
-- Prepare the Jupyter Notebook and HTML report.
-- Test the accuracy of the analytical outputs.
-
-### Member 5 – Pipeline, Configuration, and Integration
-
-**Josef Jayden Nepomuceno**
-
-Main responsibility: Connect all components and make the entire program run.
-
-Files:
-- `src/configuration.py`
-- `src/pipeline.py`
-- `main.py`
-- `tests/test_pipeline.py`
-
-Tasks:
-- Load and interpret `config.json`.
-- Create the main pipeline connecting the readers, validation, reconciliation, and analysis modules.
-- Implement the command-line entry point.
-- Handle unsupported input formats.
-- Ensure failed runs stop properly and return a nonzero exit code.
-- Ensure outputs are written only when the required processing succeeds.
-- Create end-to-end tests.
-- Coordinate integration with the other members.
-
-Each member is responsible for implementing and testing their assigned modules and providing a tested interface for integration. Members should coordinate with one another when their modules depend on the outputs or interfaces of other components.
-
-## Testing
-
-Automated tests are implemented using pytest.
-
-To run all tests:
-
-```bash
-python -m pytest
-```
-
-To run a specific test file:
-
-```bash
-python -m pytest tests/test_analysis.py -v
-```
-
-Replace `test_analysis.py` with the test file you want to run.
+- `contributions.csv` – Records individual contributions and supporting implementation details.
+- `contributions.md` – Provides a summary of group member contributions.
+- `reviews.md` – Documents code review activities and feedback.
 
 ## Notes
 
-- The dataset is a historical teaching snapshot, not a representation of current country statistics.
-- Invalid records and duplicate entries are intentionally included for testing.
-- Follow the project's configuration and validation rules when processing the dataset.
-- The processing pipeline depends on the successful integration of the input readers, validation, reconciliation, and analysis modules.
-- Analytical reports should be generated using the validated and reconciled dataset.
+- The `data/manifest.json` file contains the dataset configuration, schema definitions, input format settings, validation rules, and expected control values.
+- The supplied dataset includes intentionally introduced defects for testing data validation and reconciliation.
+- The original Gapminder observations cover 1952–2007 and should not be interpreted as current country statistics.
+- Generated outputs required by the assignment must be present in the final submission package.

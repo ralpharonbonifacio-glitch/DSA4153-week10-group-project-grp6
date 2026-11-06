@@ -220,10 +220,8 @@ __marimo__/
 .streamlit/secrets.toml
 
 # Generated project outputs
-output/*
-
-# Keep output directory in Git
-!output/.gitkeep
+# Keep required outputs in Git
+# output/*
 
 # Jupyter generated files
 *.nbconvert.ipynb

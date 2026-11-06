@@ -1,0 +1,75 @@
+check,expected,actual,tolerance,pass
+country_records.csv: raw = rejected + duplicates + canonical,1712,1712,,True
+country_records.xlsx: raw = rejected + duplicates + canonical,1712,1712,,True
+country_records.json: raw = rejected + duplicates + canonical,1712,1712,,True
+country_records.parquet: raw = rejected + duplicates + canonical,1712,1712,,True
+"country_records.csv: (country, year) keys unique",0,0,,True
+agreement country_records.csv vs country_records.xlsx: columns,"{'country', 'year', 'gdpPercap', 'pop', 'continent', 'lifeExp'}","{'country', 'year', 'gdpPercap', 'pop', 'continent', 'lifeExp'}",,True
+agreement country_records.csv vs country_records.xlsx: identical keys,True,True,,True
+agreement country_records.csv vs country_records.xlsx: row count,1704,1704,,True
+agreement country_records.csv vs country_records.xlsx: text values,True,True,,True
+agreement country_records.csv vs country_records.xlsx: integer values,True,True,,True
+agreement country_records.csv vs country_records.xlsx: missingness,True,True,,True
+agreement country_records.csv vs country_records.xlsx: float max abs difference,0.0,0.0,1e-08,True
+agreement country_records.csv vs country_records.json: columns,"{'country', 'year', 'gdpPercap', 'pop', 'continent', 'lifeExp'}","{'country', 'year', 'gdpPercap', 'pop', 'continent', 'lifeExp'}",,True
+agreement country_records.csv vs country_records.json: identical keys,True,True,,True
+agreement country_records.csv vs country_records.json: row count,1704,1704,,True
+agreement country_records.csv vs country_records.json: text values,True,True,,True
+agreement country_records.csv vs country_records.json: integer values,True,True,,True
+agreement country_records.csv vs country_records.json: missingness,True,True,,True
+agreement country_records.csv vs country_records.json: float max abs difference,0.0,0.0,1e-08,True
+agreement country_records.csv vs country_records.parquet: columns,"{'country', 'year', 'gdpPercap', 'pop', 'continent', 'lifeExp'}","{'country', 'year', 'gdpPercap', 'pop', 'continent', 'lifeExp'}",,True
+agreement country_records.csv vs country_records.parquet: identical keys,True,True,,True
+agreement country_records.csv vs country_records.parquet: row count,1704,1704,,True
+agreement country_records.csv vs country_records.parquet: text values,True,True,,True
+agreement country_records.csv vs country_records.parquet: integer values,True,True,,True
+agreement country_records.csv vs country_records.parquet: missingness,True,True,,True
+agreement country_records.csv vs country_records.parquet: float max abs difference,0.0,0.0,1e-08,True
+canonical columns match schema,"{'country', 'year', 'gdpPercap', 'pop', 'continent', 'lifeExp'}","{'country', 'year', 'gdpPercap', 'pop', 'continent', 'lifeExp'}",,True
+canonical column order,"['country', 'continent', 'year', 'lifeExp', 'pop', 'gdpPercap']","['country', 'continent', 'year', 'lifeExp', 'pop', 'gdpPercap']",,True
+"(country, year) keys unique",0,0,,True
+years outside allowed set,set(),set(),,True
+continents outside allowed set,set(),set(),,True
+canonical rows,1704,1704,,True
+countries,142,142,,True
+Philippines rows,12,12,,True
+"quarantined records, all inputs",24,24,,True
+"duplicate copies removed, all inputs",8,8,,True
+Asia 2007 rows,33,33,,True
+Asia 2007 population,3811953827,3811953827,,True
+Philippines 2007 population,91077287,91077287,,True
+Asia 2007 rows: NumPy = pandas,33,33,,True
+Asia 2007 population: NumPy = pandas,3811953827,3811953827,,True
+population matrix shape,"(3, 6)","(3, 6)",,True
+baseline shape before broadcasting,"(3, 1)","(3, 1)",,True
+index shape after broadcasting,"(3, 6)","(3, 6)",,True
+broadcast vs loop max abs difference,0.0,0.0,1e-08,True
+baseline year index = 100,0.0,0.0,1e-08,True
+round trip csv: columns,"{'country', 'year', 'gdpPercap', 'pop', 'continent', 'lifeExp'}","{'country', 'year', 'gdpPercap', 'pop', 'continent', 'lifeExp'}",,True
+round trip csv: identical keys,True,True,,True
+round trip csv: row count,1704,1704,,True
+round trip csv: text values,True,True,,True
+round trip csv: integer values,True,True,,True
+round trip csv: missingness,True,True,,True
+round trip csv: float max abs difference,0.0,0.0,1e-08,True
+round trip xlsx: columns,"{'country', 'year', 'gdpPercap', 'pop', 'continent', 'lifeExp'}","{'country', 'year', 'gdpPercap', 'pop', 'continent', 'lifeExp'}",,True
+round trip xlsx: identical keys,True,True,,True
+round trip xlsx: row count,1704,1704,,True
+round trip xlsx: text values,True,True,,True
+round trip xlsx: integer values,True,True,,True
+round trip xlsx: missingness,True,True,,True
+round trip xlsx: float max abs difference,0.0,0.0,1e-08,True
+round trip json: columns,"{'country', 'year', 'gdpPercap', 'pop', 'continent', 'lifeExp'}","{'country', 'year', 'gdpPercap', 'pop', 'continent', 'lifeExp'}",,True
+round trip json: identical keys,True,True,,True
+round trip json: row count,1704,1704,,True
+round trip json: text values,True,True,,True
+round trip json: integer values,True,True,,True
+round trip json: missingness,True,True,,True
+round trip json: float max abs difference,0.0,0.0,1e-08,True
+round trip parquet: columns,"{'country', 'year', 'gdpPercap', 'pop', 'continent', 'lifeExp'}","{'country', 'year', 'gdpPercap', 'pop', 'continent', 'lifeExp'}",,True
+round trip parquet: identical keys,True,True,,True
+round trip parquet: row count,1704,1704,,True
+round trip parquet: text values,True,True,,True
+round trip parquet: integer values,True,True,,True
+round trip parquet: missingness,True,True,,True
+round trip parquet: float max abs difference,0.0,0.0,1e-08,True
